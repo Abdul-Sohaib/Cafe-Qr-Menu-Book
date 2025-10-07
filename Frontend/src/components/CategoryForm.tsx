@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { FaUtensils, FaTimes, FaCloudUploadAlt } from 'react-icons/fa';
+import { FaUtensils, FaTimes, FaCloudUploadAlt, FaSpinner } from 'react-icons/fa';
 import type { Category } from '../types';
 
 interface CategoryFormProps {
@@ -23,6 +23,7 @@ const CategoryForm: React.FC<CategoryFormProps> = ({
   const [error, setError] = useState('');
   const [currentImage, setCurrentImage] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
   useEffect(() => {
@@ -85,6 +86,7 @@ const CategoryForm: React.FC<CategoryFormProps> = ({
       return;
     }
 
+    setIsLoading(true);
     const formData = new FormData();
     formData.append('name', name);
     if (image) {
@@ -92,9 +94,8 @@ const CategoryForm: React.FC<CategoryFormProps> = ({
     }
 
     try {
-      let response;
       if (editingCategory) {
-        response = await axios.put(
+       await axios.put(
           `${VITE_BACKEND_URL}/menu/categories/${editingCategory._id}`,
           formData,
           {
@@ -107,8 +108,7 @@ const CategoryForm: React.FC<CategoryFormProps> = ({
         toast.success('Category updated successfully');
         onCancelEdit?.();
       } else {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        response = await axios.post(`${VITE_BACKEND_URL}/menu/categories`, formData, {
+         await axios.post(`${VITE_BACKEND_URL}/menu/categories`, formData, {
           headers: {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'multipart/form-data',
@@ -124,6 +124,8 @@ const CategoryForm: React.FC<CategoryFormProps> = ({
       setError(errorMessage);
       toast.error(errorMessage);
       console.error('Error:', error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -212,10 +214,20 @@ const CategoryForm: React.FC<CategoryFormProps> = ({
         <div className="flex space-x-2">
           <button
             type="submit"
-            className="flex items-center bg-green-500 border-2 border-green-900 text-white py-2 px-4 rounded-lg font-heading hover:bg-green-600"
+            className="flex items-center bg-green-500 border-2 border-green-900 text-white py-2 px-4 rounded-lg font-heading hover:bg-green-600 disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={isLoading}
           >
-            <FaUtensils className="mr-2" />
-            {isEditing ? 'Update Category' : 'Add Category'}
+            {isLoading ? (
+              <>
+                <FaSpinner className="mr-2 animate-spin" />
+                {isEditing ? 'Updating...' : 'Adding...'}
+              </>
+            ) : (
+              <>
+                <FaUtensils className="mr-2" />
+                {isEditing ? 'Update Category' : 'Add Category'}
+              </>
+            )}
           </button>
           {isEditing && onCancelEdit && (
             <button

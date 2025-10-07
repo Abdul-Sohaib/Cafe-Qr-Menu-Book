@@ -13,6 +13,8 @@ interface CategoryListProps {
 
 const CategoryList: React.FC<CategoryListProps> = ({ token, onCategoryUpdated, onEditCategory }) => {
   const [categories, setCategories] = useState<Category[]>([]);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [categoryToDelete, setCategoryToDelete] = useState<string | null>(null);
   const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
   useEffect(() => {
@@ -26,13 +28,18 @@ const CategoryList: React.FC<CategoryListProps> = ({ token, onCategoryUpdated, o
       }
     };
     fetchCategories();
-  }, [VITE_BACKEND_URL, onCategoryUpdated]); // Refresh when onCategoryUpdated is called
+  }, [VITE_BACKEND_URL, onCategoryUpdated]);
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this category?')) return;
+    setCategoryToDelete(id);
+    setShowDeleteModal(true);
+  };
+
+  const confirmDelete = async () => {
+    if (!categoryToDelete) return;
 
     try {
-      await axios.delete(`${VITE_BACKEND_URL}/menu/categories/${id}`, {
+      await axios.delete(`${VITE_BACKEND_URL}/menu/categories/${categoryToDelete}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       toast.success('Category deleted successfully');
@@ -41,7 +48,15 @@ const CategoryList: React.FC<CategoryListProps> = ({ token, onCategoryUpdated, o
       const errorMessage = error.response?.data?.message || 'Error deleting category';
       toast.error(errorMessage);
       console.error('Error deleting category:', error);
+    } finally {
+      setShowDeleteModal(false);
+      setCategoryToDelete(null);
     }
+  };
+
+  const cancelDelete = () => {
+    setShowDeleteModal(false);
+    setCategoryToDelete(null);
   };
 
   const handleEdit = (category: Category) => {
@@ -84,6 +99,30 @@ const CategoryList: React.FC<CategoryListProps> = ({ token, onCategoryUpdated, o
               </div>
             </div>
           ))}
+        </div>
+      )}
+      {showDeleteModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-[#CEC1A8] p-6 rounded-lg shadow-lg border-2 border-[#552A0A] max-w-sm w-full">
+            <h3 className="text-2xl font-bold font-heading mb-4 text-center ">Confirm Delete</h3>
+            <p className="text-black font-heading2 mb-6 text-center">
+              Are you sure you want to delete this category?
+            </p>
+            <div className="flex justify-center space-x-4">
+              <button
+                onClick={confirmDelete}
+                className="flex items-center bg-red-500 border-2 border-red-900 text-white font-bold py-2 px-4 rounded-lg hover:bg-red-600 font-heading"
+              >
+                Delete
+              </button>
+              <button
+                onClick={cancelDelete}
+                className="flex items-center bg-gray-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-gray-600 font-heading"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>

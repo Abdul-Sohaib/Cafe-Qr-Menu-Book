@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { FaUtensils, FaTimes, FaArrowLeft, FaCloudUploadAlt } from 'react-icons/fa';
+import { FaUtensils, FaTimes, FaArrowLeft, FaCloudUploadAlt, FaSpinner } from 'react-icons/fa';
 import type { Category, MenuItem } from '../types';
 import { useNavigate } from 'react-router-dom';
 
@@ -30,6 +30,7 @@ const MenuItemForm: React.FC<MenuItemFormProps> = ({
   const [currentImage, setCurrentImage] = useState<string | null>(null);
   const [categories, setCategories] = useState<Category[]>([]);
   const [isDragging, setIsDragging] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
@@ -117,6 +118,7 @@ const MenuItemForm: React.FC<MenuItemFormProps> = ({
       return;
     }
 
+    setIsLoading(true);
     const formData = new FormData();
     formData.append('name', name);
     formData.append('price', price);
@@ -127,9 +129,8 @@ const MenuItemForm: React.FC<MenuItemFormProps> = ({
     }
 
     try {
-      let response;
       if (editingItem) {
-        response = await axios.put(
+        await axios.put(
           `${VITE_BACKEND_URL}/menu/${editingItem._id}`,
           formData,
           {
@@ -141,9 +142,9 @@ const MenuItemForm: React.FC<MenuItemFormProps> = ({
         );
         toast.success('Menu item updated successfully');
         onCancelEdit?.();
+        onCancelEdit?.();
       } else {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        response = await axios.post(`${VITE_BACKEND_URL}/menu`, formData, {
+        await axios.post(`${VITE_BACKEND_URL}/menu`, formData, {
           headers: {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'multipart/form-data',
@@ -151,7 +152,6 @@ const MenuItemForm: React.FC<MenuItemFormProps> = ({
         });
         toast.success('Menu item added successfully');
       }
-
       onItemAdded();
       setError('');
     } catch (error: any) {
@@ -165,6 +165,8 @@ const MenuItemForm: React.FC<MenuItemFormProps> = ({
         toast.error(errorMessage);
       }
       console.error('Error:', error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -303,10 +305,20 @@ const MenuItemForm: React.FC<MenuItemFormProps> = ({
         <div className="flex space-x-2">
           <button
             type="submit"
-            className="flex items-center bg-green-500 border-2 border-green-900 text-white py-2 px-4 rounded-lg hover:bg-green-600 font-heading"
+            className="flex items-center bg-green-500 border-2 border-green-900 text-white py-2 px-4 rounded-lg hover:bg-green-600 font-heading disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={isLoading}
           >
-            <FaUtensils className="mr-2" />
-            {isEditing ? 'Update Item' : 'Add Item'}
+            {isLoading ? (
+              <>
+                <FaSpinner className="mr-2 animate-spin" />
+                {isEditing ? 'Updating...' : 'Adding...'}
+              </>
+            ) : (
+              <>
+                <FaUtensils className="mr-2" />
+                {isEditing ? 'Update Item' : 'Add Item'}
+              </>
+            )}
           </button>
           {isEditing && onCancelEdit && (
             <button
