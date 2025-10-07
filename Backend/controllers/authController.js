@@ -1,5 +1,4 @@
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
 
 // Validate environment variables
 if (!process.env.ADMIN_EMAIL || !process.env.ADMIN_PASSWORD) {
@@ -7,9 +6,8 @@ if (!process.env.ADMIN_EMAIL || !process.env.ADMIN_PASSWORD) {
   process.exit(1);
 }
 
-// Hash the admin password from .env during server startup
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL;
-const ADMIN_PASSWORD_HASH = bcrypt.hashSync(process.env.ADMIN_PASSWORD, 10);
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
 
 const login = async (req, res) => {
   const { email, password } = req.body;
@@ -19,9 +17,8 @@ const login = async (req, res) => {
     return res.status(401).json({ message: 'Invalid email' });
   }
 
-  // Compare provided password with hashed password
-  const isPasswordValid = await bcrypt.compare(password, ADMIN_PASSWORD_HASH);
-  if (!isPasswordValid) {
+  // Compare provided password directly
+  if (password !== ADMIN_PASSWORD) {
     return res.status(401).json({ message: 'Invalid password' });
   }
 
