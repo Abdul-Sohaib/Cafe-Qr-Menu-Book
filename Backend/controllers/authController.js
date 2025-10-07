@@ -10,12 +10,17 @@ const ADMIN_EMAIL = process.env.ADMIN_EMAIL;
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
 
 const login = async (req, res) => {
+  console.log('=== LOGIN REQUEST RECEIVED ===');
+  console.log('Request body:', req.body);
+  
   const { email, password } = req.body;
 
   // Debug logs (remove after testing)
   console.log('Login attempt:');
   console.log('Received email:', email);
   console.log('Expected email:', ADMIN_EMAIL);
+  console.log('Email match:', email === ADMIN_EMAIL);
+  console.log('Password exists:', !!password);
   console.log('Passwords match:', password === ADMIN_PASSWORD);
 
   // Check if email matches

@@ -10,7 +10,14 @@ const menuRoutes = require('./routes/menuRoutes');
 
 const app = express();
 
-app.use(cors());
+// CORS configuration - MUST be before other middleware
+app.use(cors({
+  origin: ['https://cafe-qr-menu.netlify.app', 'http://localhost:5173'],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
 app.use(express.json());
 
 // Configure Cloudinary
@@ -22,17 +29,17 @@ cloudinary.config({
 
 // MongoDB connection with enhanced options
 mongoose.connect(process.env.MONGO_URI, {
-  serverSelectionTimeoutMS: 30000, // Increase timeout to 30 seconds
-  maxPoolSize: 10, // Limit connection pool size
-  connectTimeoutMS: 30000, // Increase connection timeout
-  socketTimeoutMS: 45000, // Increase socket timeout
-  retryWrites: true, // Enable retryable writes
-  w: 'majority', // Write concern
+  serverSelectionTimeoutMS: 30000,
+  maxPoolSize: 10,
+  connectTimeoutMS: 30000,
+  socketTimeoutMS: 45000,
+  retryWrites: true,
+  w: 'majority',
 }).then(() => {
   console.log('MongoDB connected successfully');
 }).catch((err) => {
   console.error('MongoDB connection error:', err.message);
-  process.exit(1); // Exit process on connection failure
+  process.exit(1);
 });
 
 // Handle MongoDB connection events
@@ -48,8 +55,23 @@ mongoose.connection.on('disconnected', () => {
   console.warn('MongoDB disconnected');
 });
 
+// Test route to verify server is running
+app.get('/api/test', (req, res) => {
+  res.json({ message: 'Server is running!', env: {
+    hasAdminEmail: !!process.env.ADMIN_EMAIL,
+    hasAdminPassword: !!process.env.ADMIN_PASSWORD,
+    hasJwtSecret: !!process.env.JWT_SECRET
+  }});
+});
+
 app.use('/api/auth', authRoutes);
 app.use('/api/menu', menuRoutes);
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error('Error:', err);
+  res.status(500).json({ message: 'Internal server error', error: err.message });
+});
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
