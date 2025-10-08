@@ -2,18 +2,17 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { FaEdit, FaTrash, FaExclamationCircle } from 'react-icons/fa';
+import { FaEdit, FaTrash, FaCheckCircle } from 'react-icons/fa';
 import type { Category, MenuItem } from '../types';
 import { useNavigate } from 'react-router-dom';
-import { CheckCircle } from 'lucide-react';
 
-interface MenuItemListProps {
+interface OutOfStockItemsProps {
   token: string;
   onItemUpdated: () => void;
   onEditItem: (item: MenuItem) => void;
 }
 
-const MenuItemList: React.FC<MenuItemListProps> = ({ token, onItemUpdated, onEditItem }) => {
+const OutOfStockItems: React.FC<OutOfStockItemsProps> = ({ token, onItemUpdated, onEditItem }) => {
   const [items, setItems] = useState<MenuItem[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
@@ -29,14 +28,15 @@ const MenuItemList: React.FC<MenuItemListProps> = ({ token, onItemUpdated, onEdi
           axios.get(`${VITE_BACKEND_URL}/menu`),
           axios.get(`${VITE_BACKEND_URL}/menu/categories`),
         ]);
-        setItems(itemsResponse.data);
+        // Filter for out-of-stock items only
+        setItems(itemsResponse.data.filter((item: MenuItem) => item.isOutOfStock));
         setCategories(categoriesResponse.data);
         if (categoriesResponse.data.length > 0) {
           setSelectedCategory(categoriesResponse.data[0]._id);
         }
       } catch (error) {
         console.error('Error fetching data:', error);
-        toast.error('Failed to fetch menu items or categories');
+        toast.error('Failed to fetch out-of-stock items or categories');
       }
     };
     fetchData();
@@ -79,12 +79,12 @@ const MenuItemList: React.FC<MenuItemListProps> = ({ token, onItemUpdated, onEdi
     onEditItem(item);
   };
 
-  const handleToggleStock = async (id: string, currentStatus: boolean) => {
+  const handleToggleStock = async (id: string) => {
     try {
       await axios.patch(`${VITE_BACKEND_URL}/menu/${id}/toggle-stock`, {}, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      toast.success(`Item marked as ${currentStatus ? 'in stock' : 'out of stock'}`);
+      toast.success('Item marked as in stock');
       onItemUpdated();
     } catch (error: any) {
       if (error.response?.status === 401) {
@@ -99,7 +99,7 @@ const MenuItemList: React.FC<MenuItemListProps> = ({ token, onItemUpdated, onEdi
 
   return (
     <div className="mb-8">
-      <h2 className="text-2xl font-bold mb-4 font-heading">Menu Items</h2>
+      <h2 className="text-2xl font-bold mb-4 font-heading">Out of Stock Items</h2>
       {categories.length === 0 ? (
         <div className="text-center text-gray-500 font-heading">No categories available</div>
       ) : (
@@ -134,7 +134,7 @@ const MenuItemList: React.FC<MenuItemListProps> = ({ token, onItemUpdated, onEdi
                 }
                 return (typeof item.categoryId === 'string' ? item.categoryId : item.categoryId._id) === selectedCategory;
               }).length === 0 ? (
-                <div className="text-gray-500">No items in this category</div>
+                <div className="text-black font-heading2 ">No out-of-stock items in this category</div>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {items
@@ -147,11 +147,9 @@ const MenuItemList: React.FC<MenuItemListProps> = ({ token, onItemUpdated, onEdi
                     })
                     .map((item) => (
                       <div key={item._id} className="bg-white p-2 rounded-lg shadow-lg border-2 border-[#552A0A] h-fit relative">
-                        {item.isOutOfStock && (
-                          <div className="absolute top-2 left-2 bg-red-500 text-white px-2 py-1 rounded text-sm font-heading">
-                            Out of Stock
-                          </div>
-                        )}
+                        <div className="absolute top-2 left-2 bg-red-500 text-white px-2 py-1 rounded text-sm font-heading">
+                          Out of Stock
+                        </div>
                         <img
                           src={item.imageUrl}
                           alt={item.name}
@@ -160,14 +158,14 @@ const MenuItemList: React.FC<MenuItemListProps> = ({ token, onItemUpdated, onEdi
                             e.currentTarget.src = '/placeholder-image.jpg';
                           }}
                         />
-                        <div className='flex flex-col gap-4'>
-                          <div className='flex justify-between items-center'>
+                        <div className="flex flex-col gap-4">
+                          <div className="flex justify-between items-center">
                             <h3 className="text-lg font-bold font-heading">{item.name}</h3>
                             <p className="text-gray-600 font-heading font-bold">${item.price.toFixed(2)}</p>
                           </div>
                           <p className="text-gray-500 text-sm font-body">{item.description}</p>
                         </div>
-                        <div className="flex justify-end mt-4 space-x-2 w-full ">
+                        <div className="flex justify-end mt-4 space-x-2 w-full">
                           <button
                             onClick={() => handleEdit(item)}
                             className="text-blue-500 hover:text-blue-700"
@@ -183,23 +181,13 @@ const MenuItemList: React.FC<MenuItemListProps> = ({ token, onItemUpdated, onEdi
                             <FaTrash />
                           </button>
                           <button
-                            onClick={() => handleToggleStock(item._id, item.isOutOfStock)}
-                            className={`text-${item.isOutOfStock ? 'green' : 'yellow'}-500 hover:text-${item.isOutOfStock ? 'green' : 'yellow'}-700`}
-                            title={item.isOutOfStock ? 'Mark as In Stock' : 'Mark as Out of Stock'}
+                            onClick={() => handleToggleStock(item._id)}
+                            className="text-green-500 hover:text-green-700"
+                            title="Mark as In Stock"
                           >
-                            <div>
-                              {item.isOutOfStock ? 
-                              <div className='flex items-center gap-1 border-2 border-red-900 p-1 rounded-lg'>
-                              <span className='text-red-500 font-heading2 font-bold'>Out of Stock</span> 
-                              <FaExclamationCircle className='w-4 text-black'/>
-                              </div>
-                              :
-                              <div className='flex items-center gap-1 border-2 border-green-900 p-1 rounded-lg'> 
-                              <span className='text-green-600 font-heading2 font-bold'>In Stock</span>
-                              <CheckCircle className='w-4 text-black'/>
-                              </div>
-                              }
-                            
+                            <div className="flex items-center gap-1 border-2 border-green-900 p-1 rounded-lg">
+                              <span className="text-green-600 font-heading2 font-bold">In Stock</span>
+                              <FaCheckCircle className="w-4 text-black" />
                             </div>
                           </button>
                         </div>
@@ -239,4 +227,4 @@ const MenuItemList: React.FC<MenuItemListProps> = ({ token, onItemUpdated, onEdi
   );
 };
 
-export default MenuItemList;
+export default OutOfStockItems;

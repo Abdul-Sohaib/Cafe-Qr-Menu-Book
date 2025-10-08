@@ -344,8 +344,14 @@ const MobileMenuDisplay: React.FC<MobileMenuDisplayProps> = ({ categories, items
                         }}
                       >
                         <div className="bg-[#CEC1A8] rounded-2xl shadow-2xl overflow-hidden border-2 border-[#673E20] p-2">
+                          
                           {/* Image Section */}
                           <div className="relative h-80 sm:h-64 bg-[#CEC1A8]">
+                            {item.isOutOfStock && (
+                            <div className="absolute top-2 left-2 bg-red-500 text-white px-2 py-1 rounded-md font-bold text-md font-heading2">
+                              Out of Stock
+                            </div>
+                          )}
                             <img
                               src={item.imageUrl}
                               alt={item.name}
@@ -364,7 +370,7 @@ const MobileMenuDisplay: React.FC<MobileMenuDisplayProps> = ({ categories, items
                               <h3 className="text-xl xs:text-lg font-bold font-heading text-black flex-1">{item.name}</h3>
                               <div className="ml-4 text-right">
                                 <p className="text-2xl xs:text-xl font-bold text-[#451C06] font-heading">
-                                  ${item.price.toFixed(2)}
+                                  ₹{item.price.toFixed(2)}
                                 </p>
                               </div>
                             </div>

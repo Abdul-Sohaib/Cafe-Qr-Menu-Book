@@ -166,6 +166,7 @@ const createMenuItem = async (req, res) => {
       categoryId,
       imageUrl: result.secure_url,
       imagePublicId: result.public_id,
+      isOutOfStock: false
     });
 
     await menuItem.save();
@@ -226,6 +227,28 @@ const updateMenuItem = async (req, res) => {
   }
 };
 
+const toggleOutOfStock = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const menuItem = await MenuItem.findById(id);
+    
+    if (!menuItem) {
+      return res.status(404).json({ message: 'Item not found' });
+    }
+
+    menuItem.isOutOfStock = !menuItem.isOutOfStock;
+    await menuItem.save();
+    
+    res.json({ 
+      message: `Item marked as ${menuItem.isOutOfStock ? 'out of stock' : 'in stock'}`, 
+      item: menuItem 
+    });
+  } catch (error) {
+    console.error('Toggle out of stock error:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
 const deleteMenuItem = async (req, res) => {
   try {
     const { id } = req.params;
@@ -254,4 +277,5 @@ module.exports = {
   createMenuItem,
   updateMenuItem,
   deleteMenuItem,
+  toggleOutOfStock
 };

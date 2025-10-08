@@ -7,6 +7,7 @@ import CategoryForm from '../components/CategoryForm';
 import CategoryList from '../components/CategoryList';
 import MenuItemForm from '../components/MenuItemForm';
 import MenuItemList from '../components/MenuItemList';
+import OutOfStockItems from '../components/OutOfStockItems';
 import AnimatedSplashScreen from './AnimatedSplashScreen';
 import type { Category, MenuItem } from '../types';
 
@@ -15,6 +16,7 @@ const AdminDashboard: React.FC = () => {
   const [editingItem, setEditingItem] = useState<MenuItem | null>(null);
   const [editingCategory, setEditingCategory] = useState<Category | null>(null);
   const [showItems, setShowItems] = useState(false);
+  const [showOutOfStock, setShowOutOfStock] = useState(false);
   const [showSplash, setShowSplash] = useState(true);
   const [isGeneratingQR, setIsGeneratingQR] = useState(false);
   const token = localStorage.getItem('token') || '';
@@ -66,7 +68,15 @@ const AdminDashboard: React.FC = () => {
 
   const handleToggleItems = () => {
     setShowItems(!showItems);
-    setEditingItem(null); // Clear editing state when toggling
+    setShowOutOfStock(false);
+    setEditingItem(null);
+    setEditingCategory(null);
+  };
+
+  const handleToggleOutOfStock = () => {
+    setShowOutOfStock(!showOutOfStock);
+    setShowItems(false);
+    setEditingItem(null);
     setEditingCategory(null);
   };
 
@@ -172,12 +182,49 @@ const AdminDashboard: React.FC = () => {
             onItemUpdated={handleItemAdded}
             onEditItem={handleEditItem}
           />
-          <button
-            onClick={handleToggleItems}
-            className="mt-4 bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 font-heading"
-          >
-            Back to Categories
-          </button>
+          <div className="flex gap-4 mt-4">
+            <button
+              onClick={handleToggleItems}
+              className="bg-blue-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-600 font-heading2"
+            >
+              Back to Categories
+            </button>
+            <button
+              onClick={handleToggleOutOfStock}
+              className="bg-transparent text-black border-2 border-black font-bold py-2 px-4 rounded-lg  font-heading2"
+            >
+              View Out of Stock Items
+            </button>
+          </div>
+        </>
+      ) : showOutOfStock ? (
+        <>
+          <MenuItemForm
+            token={token}
+            onItemAdded={handleItemAdded}
+            editingItem={editingItem}
+            onCancelEdit={handleCancelEdit}
+            onBack={handleToggleOutOfStock}
+          />
+          <OutOfStockItems
+            token={token}
+            onItemUpdated={handleItemAdded}
+            onEditItem={handleEditItem}
+          />
+          <div className="flex gap-4 mt-4">
+            <button
+              onClick={handleToggleOutOfStock}
+              className="bg-blue-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-600 font-heading2"
+            >
+              Back to Categories
+            </button>
+            <button
+              onClick={handleToggleItems}
+              className="bg-green-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-green-600 font-heading2"
+            >
+              View All Items
+            </button>
+          </div>
         </>
       ) : (
         <>
@@ -192,12 +239,20 @@ const AdminDashboard: React.FC = () => {
             onCategoryUpdated={handleCategoryAdded}
             onEditCategory={handleEditCategory}
           />
-          <button
-            onClick={handleToggleItems}
-            className="mt-4 bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 font-heading"
-          >
-            Add Items
-          </button>
+          <div className="flex gap-4 mt-4">
+            <button
+              onClick={handleToggleItems}
+              className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 font-heading"
+            >
+              Add Items
+            </button>
+            <button
+              onClick={handleToggleOutOfStock}
+              className="bg-transparent text-black border-2 border-black py-2 px-4 rounded-lg font-bold  font-heading2"
+            >
+              View Out of Stock Items
+            </button>
+          </div>
         </>
       )}
     </div>

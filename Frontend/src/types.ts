@@ -11,4 +11,5 @@ export interface MenuItem {
   description: string;
   imageUrl: string;
   categoryId: Category | string; // Category object when populated, string when sending to backend
+  isOutOfStock: boolean;
 }

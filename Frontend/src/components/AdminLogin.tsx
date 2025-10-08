@@ -2,6 +2,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { FaLock, FaEnvelope } from 'react-icons/fa';
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 interface AdminLoginProps {
   onLogin: (token: string) => void;
@@ -12,6 +13,7 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ onLogin }) => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
   const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -40,23 +42,36 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ onLogin }) => {
                 id="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full outline-none font-heading"
+                className="w-full outline-none font-heading text-black bg-transparent"
                 placeholder="Enter email"
               />
             </div>
           </div>
           <div className="mb-6">
             <label className="block text-black mb-2 font-heading font-bold" htmlFor="password">Password</label>
-            <div className="flex items-center border border-black bg-transparent text-white rounded-lg p-2">
+            <div className="flex items-center border border-black bg-transparent  rounded-lg p-2">
               <FaLock className="text-black mr-2" />
               <input
-                type="password"
+                type={showPassword ? "text" : "password"}
                 id="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full outline-none font-heading "
+                className="w-full outline-none font-heading text-black bg-transparent"
                 placeholder="Enter password"
               />
+               {/* Show/Hide password icon */}
+    <button
+      type="button"
+      onClick={() => setShowPassword(!showPassword)}
+      className="focus:outline-none"
+    >
+      {showPassword ? (
+        <FaEyeSlash className="text-black" />
+      ) : (
+        <FaEye className="text-black" />
+      )}
+    </button>
+              
             </div>
           </div>
           <button

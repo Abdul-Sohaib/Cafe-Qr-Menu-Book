@@ -37,10 +37,9 @@ const MenuDisplay: React.FC = () => {
       } catch (error) {
         console.error('Error fetching data:', error);
       } finally {
-        // Add a short artificial delay so the splash screen feels intentional
         setTimeout(() => {
           setLoading(false);
-        }, 3000); // 3 seconds delay
+        }, 3000);
       }
     };
     fetchData();
@@ -54,12 +53,10 @@ const MenuDisplay: React.FC = () => {
     return <AnimatedSplashScreenforcustomer />;
   }
 
-  // Render mobile version
   if (isMobile) {
     return <MobileMenuDisplay categories={categories} items={items} />;
   }
 
-  // Animation variants
   const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
@@ -77,7 +74,7 @@ const MenuDisplay: React.FC = () => {
       y: 0,
       transition: {
         duration: 0.5,
-        ease: 'easeOut', // Explicitly using a valid easing function string
+        ease: 'easeOut',
       },
     },
   };
@@ -89,7 +86,7 @@ const MenuDisplay: React.FC = () => {
       scale: 1,
       transition: {
         duration: 0.4,
-        ease: 'easeOut', // Explicitly using a valid easing function string
+        ease: 'easeOut',
       },
     },
   };
@@ -101,12 +98,11 @@ const MenuDisplay: React.FC = () => {
       y: 0,
       transition: {
         duration: 0.6,
-        ease: 'easeOut', // Explicitly using a valid easing function string
+        ease: 'easeOut',
       },
     },
   };
 
-  // Render desktop version
   return (
     <div className="container mx-auto p-4">
       <motion.h1 
@@ -195,7 +191,7 @@ const MenuDisplay: React.FC = () => {
                       .map((item) => (
                         <motion.div 
                           key={item._id} 
-                          className="bg-[#CEC1A8] border-2 border-[#673E20] hover:bg-[#B59E7D] transform ease-in-out h-fit p-4 rounded-lg shadow-lg"
+                          className="bg-[#CEC1A8] border-2 border-[#673E20] hover:bg-[#B59E7D] transform ease-in-out h-fit p-4 rounded-lg shadow-lg relative"
                           variants={itemVariants}
                           whileHover={{ 
                             y: -8, 
@@ -203,6 +199,11 @@ const MenuDisplay: React.FC = () => {
                             transition: { duration: 0.3 }
                           }}
                         >
+                          {item.isOutOfStock && (
+                            <div className="absolute top-2 left-2 bg-red-500 text-white px-2 py-1 rounded text-sm font-heading">
+                              Out of Stock
+                            </div>
+                          )}
                           <img
                             src={item.imageUrl}
                             alt={item.name}
