@@ -126,14 +126,14 @@ const MobileMenuDisplay: React.FC<MobileMenuDisplayProps> = ({ categories, items
   };
 
   const handleVarietyTouchStart = (e: React.TouchEvent, itemId: string) => {
-    setVarietyTouchStart(e.touches[0].clientX);
+    setVarietyTouchStart(e.touches[0].clientY); // Changed to clientY for vertical swipe
     setIsVarietyDragging(true);
     setActiveVarietyItemId(itemId);
   };
 
   const handleVarietyTouchMove = (e: React.TouchEvent) => {
     if (!isVarietyDragging || !activeVarietyItemId) return;
-    const currentTouch = e.touches[0].clientX;
+    const currentTouch = e.touches[0].clientY; // Changed to clientY
     const diff = currentTouch - varietyTouchStart;
     setVarietyDragOffset(diff);
     setVarietyTouchEnd(currentTouch);
@@ -146,9 +146,9 @@ const MobileMenuDisplay: React.FC<MobileMenuDisplayProps> = ({ categories, items
 
     if (Math.abs(distance) > minSwipeDistance) {
       if (distance > 0) {
-        handleVarietySwipe(itemId, totalVarieties, 'next');
+        handleVarietySwipe(itemId, totalVarieties, 'next'); // Swipe down
       } else if (distance < 0) {
-        handleVarietySwipe(itemId, totalVarieties, 'prev');
+        handleVarietySwipe(itemId, totalVarieties, 'prev'); // Swipe up
       }
     }
     setVarietyDragOffset(0);
@@ -156,14 +156,14 @@ const MobileMenuDisplay: React.FC<MobileMenuDisplayProps> = ({ categories, items
   };
 
   const handleVarietyMouseDown = (e: React.MouseEvent, itemId: string) => {
-    setVarietyTouchStart(e.clientX);
+    setVarietyTouchStart(e.clientY); // Changed to clientY
     setIsVarietyDragging(true);
     setActiveVarietyItemId(itemId);
   };
 
   const handleVarietyMouseMove = (e: React.MouseEvent) => {
     if (!isVarietyDragging || !activeVarietyItemId) return;
-    const currentPos = e.clientX;
+    const currentPos = e.clientY; // Changed to clientY
     const diff = currentPos - varietyTouchStart;
     setVarietyDragOffset(diff);
     setVarietyTouchEnd(currentPos);
@@ -176,9 +176,9 @@ const MobileMenuDisplay: React.FC<MobileMenuDisplayProps> = ({ categories, items
 
     if (Math.abs(distance) > minSwipeDistance) {
       if (distance > 0) {
-        handleVarietySwipe(itemId, totalVarieties, 'next');
+        handleVarietySwipe(itemId, totalVarieties, 'next'); // Swipe down
       } else if (distance < 0) {
-        handleVarietySwipe(itemId, totalVarieties, 'prev');
+        handleVarietySwipe(itemId, totalVarieties, 'prev'); // Swipe up
       }
     }
     setVarietyDragOffset(0);
@@ -459,7 +459,7 @@ const MobileMenuDisplay: React.FC<MobileMenuDisplayProps> = ({ categories, items
                             {/* Varieties Swipe Section */}
                             {item.varieties && item.varieties.length > 0 && (
                               <div
-                                className="relative flex items-center justify-between gap-3 mb-1"
+                                className="relative flex items-center justify-between gap-3 mb-1 overflow-hidden"
                                 onTouchStart={(e) => handleVarietyTouchStart(e, item._id)}
                                 onTouchMove={handleVarietyTouchMove}
                                 onTouchEnd={() => handleVarietyTouchEnd(item._id, item.varieties!.length)}
@@ -473,16 +473,16 @@ const MobileMenuDisplay: React.FC<MobileMenuDisplayProps> = ({ categories, items
                                 }}
                               >
                                 <div
-                                  className="flex-1 text-center text-sm xs:text-base font-medium  work-sans  rounded-lg py-1 bg-[#9f836abb] text-black transition-all duration-300 ease-out flex items-center justify-between px-2"
+                                  className="flex-1 text-center text-sm xs:text-base font-medium work-sans rounded-lg py-1 bg-[#9f836abb] text-black transition-all duration-300 ease-out flex items-center justify-between px-2"
                                   style={{
-                                    transform: `translateX(${activeVarietyItemId === item._id ? varietyDragOffset / 2 : 0}px)`,
+                                    transform: `translateY(${activeVarietyItemId === item._id ? varietyDragOffset / 2 : 0}px)`,
                                     opacity: activeVarietyItemId === item._id && isVarietyDragging ? 0.7 : 1,
                                   }}
                                 >
                                   {item.varieties[currentVarietyIndex[item._id] || 0].name} (€{item.varieties[currentVarietyIndex[item._id] || 0].additionalPrice.toFixed(2)})
                                   <div className="flex justify-center items-center">
                                     <span className='text-xs work-sans'>Swipe</span>
-                                    <MdOutlineKeyboardDoubleArrowRight className="text-sm" />
+                                    <MdOutlineKeyboardDoubleArrowRight className="text-sm transform rotate-90" />
                                   </div>
                                 </div>
                               </div>
