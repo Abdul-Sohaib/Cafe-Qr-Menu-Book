@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { FaUtensils, FaTimes, FaArrowLeft, FaCloudUploadAlt, FaSpinner } from 'react-icons/fa';
+import { FaUtensils, FaTimes, FaArrowLeft, FaCloudUploadAlt, FaSpinner, FaPlus, FaTrash } from 'react-icons/fa';
 import type { Category, MenuItem } from '../types';
 import { useNavigate } from 'react-router-dom';
 
@@ -31,7 +31,9 @@ const MenuItemForm: React.FC<MenuItemFormProps> = ({
   const [categories, setCategories] = useState<Category[]>([]);
   const [isDragging, setIsDragging] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [varieties, setVarieties] = useState<{ name: string; additionalPrice: string }[]>([]);
   const navigate = useNavigate();
+  const isEditing = !!editingItem;
 
   const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -53,6 +55,7 @@ const MenuItemForm: React.FC<MenuItemFormProps> = ({
       setDescription(editingItem.description);
       setCategoryId(typeof editingItem.categoryId === 'string' ? editingItem.categoryId : editingItem.categoryId._id);
       setCurrentImage(editingItem.imageUrl);
+      setVarieties(editingItem.varieties?.map(v => ({ name: v.name, additionalPrice: v.additionalPrice.toString() })) || []);
     } else {
       setName('');
       setPrice('');
@@ -60,6 +63,7 @@ const MenuItemForm: React.FC<MenuItemFormProps> = ({
       setCategoryId('');
       setCurrentImage(null);
       setImage(null);
+      setVarieties([]);
     }
   }, [VITE_BACKEND_URL, editingItem]);
 
@@ -104,6 +108,20 @@ const MenuItemForm: React.FC<MenuItemFormProps> = ({
     setCurrentImage(null);
   };
 
+  const addVariety = () => {
+    setVarieties([...varieties, { name: '', additionalPrice: '' }]);
+  };
+
+  const removeVariety = (index: number) => {
+    setVarieties(varieties.filter((_, i) => i !== index));
+  };
+
+  const updateVariety = (index: number, field: 'name' | 'additionalPrice', value: string) => {
+    const updatedVarieties = [...varieties];
+    updatedVarieties[index][field] = value;
+    setVarieties(updatedVarieties);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name || !price || !description || !categoryId) {
@@ -127,6 +145,12 @@ const MenuItemForm: React.FC<MenuItemFormProps> = ({
     if (image) {
       formData.append('image', image);
     }
+    if (varieties.length > 0) {
+      formData.append('varieties', JSON.stringify(varieties.map(v => ({
+        name: v.name,
+        additionalPrice: parseFloat(v.additionalPrice) || 0
+      }))));
+    }
 
     try {
       if (editingItem) {
@@ -141,7 +165,6 @@ const MenuItemForm: React.FC<MenuItemFormProps> = ({
           }
         );
         toast.success('Menu item updated successfully');
-        onCancelEdit?.();
         onCancelEdit?.();
       } else {
         await axios.post(`${VITE_BACKEND_URL}/menu`, formData, {
@@ -164,31 +187,26 @@ const MenuItemForm: React.FC<MenuItemFormProps> = ({
         setError(errorMessage);
         toast.error(errorMessage);
       }
-      console.error('Error:', error);
     } finally {
       setIsLoading(false);
     }
   };
 
-  const isEditing = !!editingItem;
-
   return (
-    <div className="bg-[#CEC1A8] border-2 border-[#552A0A] p-6 rounded-lg shadow-lg mb-6">
-      <div className="flex justify-between items-center mb-4">
-        <h3 className="text-3xl font-bold font-heading text-center w-full">
-          {isEditing ? 'Edit Menu Item' : 'Add Menu Item'}
-        </h3>
-        {onBack && (
-          <button
-            onClick={onBack}
-            className="flex items-center bg-gray-500 text-white py-2 px-4 rounded-lg hover:bg-gray-600 font-heading2"
-          >
-            <FaArrowLeft className="mr-2" />
-            Back
-          </button>
-        )}
-      </div>
-      {error && <p className="text-red-500 mb-4">{error}</p>}
+    <div className="max-w-full mx-auto p-6 bg-[#CEC1A8] border-2 border-[#552A0A] rounded-lg shadow-lg">
+      {onBack && (
+        <button
+          onClick={onBack}
+          className="mb-4 flex items-center text-black border-2 border-black rounded-md px-2 py-1 font-heading"
+        >
+          <FaArrowLeft className="mr-2" />
+          Back
+        </button>
+      )}
+      <h2 className="text-2xl font-bold mb-6 font-heading">
+        {isEditing ? 'Edit Menu Item' : 'Add New Menu Item'}
+      </h2>
+      {error && <p className="text-red-500 mb-4 font-heading2">{error}</p>}
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
           <label className="block text-black mb-2 font-heading font-bold" htmlFor="name">Name</label>
@@ -243,7 +261,44 @@ const MenuItemForm: React.FC<MenuItemFormProps> = ({
             ))}
           </select>
         </div>
-
+        <div className="mb-4">
+          <label className="block text-black mb-2 font-heading font-bold">Varieties</label>
+          {varieties.map((variety, index) => (
+            <div key={index} className="flex items-center space-x-2 mb-2">
+              <input
+                type="text"
+                value={variety.name}
+                onChange={(e) => updateVariety(index, 'name', e.target.value)}
+                className="w-full border border-black rounded-lg p-2 text-black bg-transparent font-heading2 placeholder:text-black"
+                placeholder="Variety name"
+                required
+              />
+              <input
+                type="number"
+                value={variety.additionalPrice}
+                onChange={(e) => updateVariety(index, 'additionalPrice', e.target.value)}
+                className="w-1/3 border border-black rounded-lg p-2 text-black bg-transparent font-heading2 placeholder:text-black"
+                placeholder="Extra price"
+                required
+              />
+              <button
+                type="button"
+                onClick={() => removeVariety(index)}
+                className="text-red-500 hover:text-red-700"
+              >
+                <FaTrash />
+              </button>
+            </div>
+          ))}
+          <button
+            type="button"
+            onClick={addVariety}
+            className="flex items-center text-[#552A0A] hover:text-[#8B6F47] font-heading"
+          >
+            <FaPlus className="mr-2" />
+            Add Variety
+          </button>
+        </div>
         <div className="mb-4">
           <label className="block text-black mb-2 font-heading font-bold">
             Menu Item Image

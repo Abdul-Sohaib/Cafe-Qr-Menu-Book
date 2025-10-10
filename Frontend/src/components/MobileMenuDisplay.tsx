@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import type { Category, MenuItem } from '../types';
+import logo from '../assets/cafe-logo.png';
+import { BiRightArrow } from 'react-icons/bi';
 
 interface MobileMenuDisplayProps {
   categories: Category[];
@@ -22,6 +24,14 @@ const MobileMenuDisplay: React.FC<MobileMenuDisplayProps> = ({ categories, items
   const [categoryTouchEnd, setCategoryTouchEnd] = useState(0);
   const [isCategoryDragging, setIsCategoryDragging] = useState(false);
   const [categoryDragOffset, setCategoryDragOffset] = useState(0);
+
+  // Variety swipe states
+  const [currentVarietyIndex, setCurrentVarietyIndex] = useState<{ [key: string]: number }>({});
+  const [varietyTouchStart, setVarietyTouchStart] = useState(0);
+  const [varietyTouchEnd, setVarietyTouchEnd] = useState(0);
+  const [isVarietyDragging, setIsVarietyDragging] = useState(false);
+  const [varietyDragOffset, setVarietyDragOffset] = useState(0);
+  const [activeVarietyItemId, setActiveVarietyItemId] = useState<string | null>(null);
 
   const handleCategorySwipe = (categoryId: string, index: number) => {
     setSelectedCategory(categoryId);
@@ -101,6 +111,80 @@ const MobileMenuDisplay: React.FC<MobileMenuDisplayProps> = ({ categories, items
     setCategoryDragOffset(0);
   };
 
+  // Variety swipe handlers
+  const handleVarietySwipe = (itemId: string, totalVarieties: number, direction: 'next' | 'prev') => {
+    setCurrentVarietyIndex((prev) => {
+      const currentIndex = prev[itemId] || 0;
+      let newIndex: number;
+      if (direction === 'next') {
+        newIndex = currentIndex + 1 >= totalVarieties ? 0 : currentIndex + 1;
+      } else {
+        newIndex = currentIndex - 1 < 0 ? totalVarieties - 1 : currentIndex - 1;
+      }
+      return { ...prev, [itemId]: newIndex };
+    });
+  };
+
+  const handleVarietyTouchStart = (e: React.TouchEvent, itemId: string) => {
+    setVarietyTouchStart(e.touches[0].clientX);
+    setIsVarietyDragging(true);
+    setActiveVarietyItemId(itemId);
+  };
+
+  const handleVarietyTouchMove = (e: React.TouchEvent) => {
+    if (!isVarietyDragging || !activeVarietyItemId) return;
+    const currentTouch = e.touches[0].clientX;
+    const diff = currentTouch - varietyTouchStart;
+    setVarietyDragOffset(diff);
+    setVarietyTouchEnd(currentTouch);
+  };
+
+  const handleVarietyTouchEnd = (itemId: string, totalVarieties: number) => {
+    setIsVarietyDragging(false);
+    const minSwipeDistance = 50;
+    const distance = varietyTouchStart - varietyTouchEnd;
+
+    if (Math.abs(distance) > minSwipeDistance) {
+      if (distance > 0) {
+        handleVarietySwipe(itemId, totalVarieties, 'next');
+      } else if (distance < 0) {
+        handleVarietySwipe(itemId, totalVarieties, 'prev');
+      }
+    }
+    setVarietyDragOffset(0);
+    setActiveVarietyItemId(null);
+  };
+
+  const handleVarietyMouseDown = (e: React.MouseEvent, itemId: string) => {
+    setVarietyTouchStart(e.clientX);
+    setIsVarietyDragging(true);
+    setActiveVarietyItemId(itemId);
+  };
+
+  const handleVarietyMouseMove = (e: React.MouseEvent) => {
+    if (!isVarietyDragging || !activeVarietyItemId) return;
+    const currentPos = e.clientX;
+    const diff = currentPos - varietyTouchStart;
+    setVarietyDragOffset(diff);
+    setVarietyTouchEnd(currentPos);
+  };
+
+  const handleVarietyMouseUp = (itemId: string, totalVarieties: number) => {
+    setIsVarietyDragging(false);
+    const minSwipeDistance = 50;
+    const distance = varietyTouchStart - varietyTouchEnd;
+
+    if (Math.abs(distance) > minSwipeDistance) {
+      if (distance > 0) {
+        handleVarietySwipe(itemId, totalVarieties, 'next');
+      } else if (distance < 0) {
+        handleVarietySwipe(itemId, totalVarieties, 'prev');
+      }
+    }
+    setVarietyDragOffset(0);
+    setActiveVarietyItemId(null);
+  };
+
   const filteredItems = items.filter((item) => {
     if (!item.categoryId) return false;
     return (typeof item.categoryId === 'string' ? item.categoryId : item.categoryId._id) === selectedCategory;
@@ -173,11 +257,12 @@ const MobileMenuDisplay: React.FC<MobileMenuDisplayProps> = ({ categories, items
 
   return (
     <div className="min-h-screen p-4 sm:p-2">
-      <h1 className=" xs:text-2xl font-bold font-heading mb-6 text-center">Wanna have something delicious?</h1>
+      <img src={logo} alt="" className='w-24 justify-center mx-auto' />
+      <h1 className=" xs:text-[1.40rem] work-sans font-medium  mb-6 text-center">Wanna have something delicious?</h1>
       
       {/* Categories Carousel Section */}
       <div className="mb-6">
-        <h2 className="text-xl xs:text-xl font-heading2 font-bold mb-4">Categories</h2>
+        <h2 className="text-xl xs:text-xl work-sans font-semibold text-center mb-4">Categories</h2>
         
         {/* Category indicator dots */}
         <div className="flex justify-center gap-2 mb-4">
@@ -227,21 +312,21 @@ const MobileMenuDisplay: React.FC<MobileMenuDisplayProps> = ({ categories, items
                   }}
                 >
                   <div
-                    className={`cursor-pointer p-3 sm:p-2 rounded-lg shadow-lg flex items-center gap-4 sm:gap-2 h-full transition-all ${
+                    className={`cursor-pointer p-3 sm:p-2 rounded-lg shadow-lg flex items-center h-full transition-all ${
                       selectedCategory === category._id 
-                        ? 'bg-[#B59E7D] border-l-4 border-[#673E20]' 
+                        ? 'bg-[#E2C4A8] border-2 border-l-4 border-[#673E20]' 
                         : 'bg-[#CEC1A8]'
                     }`}
                   >
                     <img
                       src={category.imageUrl}
                       alt={category.name}
-                      className="w-20 xs:w-20 h-20 xs:h-20 object-cover rounded-lg border border-[#673E20]"
+                      className="w-20 xs:w-28 h-20 xs:h-20 object-cover rounded-lg border border-[#673E20]"
                       onError={(e) => {
                         e.currentTarget.src = '/placeholder-image.jpg';
                       }}
                     />
-                    <h3 className="text-lg xs:text-xl font-light font-body">{category.name}</h3>
+                    <h3 className="text-lg xs:text-2xl font-medium text-center w-full work-sans">{category.name}</h3>
                   </div>
                 </div>
               );
@@ -250,7 +335,7 @@ const MobileMenuDisplay: React.FC<MobileMenuDisplayProps> = ({ categories, items
         </div>
 
         {/* Swipe instruction for categories */}
-        <div className="text-center mt-2 text-sm xs:text-md font-body text-gray-900">
+        <div className="text-center mt-2 text-sm xs:text-md font-regular work-sans text-gray-900">
           Swipe to browse categories
         </div>
       </div>
@@ -258,16 +343,14 @@ const MobileMenuDisplay: React.FC<MobileMenuDisplayProps> = ({ categories, items
       {/* Items Section */}
       {selectedCategory && (
         <div className="mt-20">
-          <h2 className="text-2xl xs:text-4xl font-heading font-bold  text-center">
+          <h2 className="text-2xl xs:text-4xl work-sans font-bold  text-center">
             {categories.find((c) => c._id === selectedCategory)?.name}
           </h2>
           
           {filteredItems.length === 0 ? (
-            <div className="text-center font-heading text-gray-500 py-8 xs:text-md">No items in this category</div>
+            <div className="text-center work-sans text-gray-500 py-8 xs:text-md">No items in this category</div>
           ) : (
             <div className="relative">
-             
-
               {/* Swipeable card container - Stack layout */}
               <div className=" flex justify-center bottom-60 right-[11rem] relative items-center mx-auto" style={{ minHeight: '550px', width: '100%' }}>
                 <div
@@ -343,15 +426,14 @@ const MobileMenuDisplay: React.FC<MobileMenuDisplayProps> = ({ categories, items
                           transformStyle: 'preserve-3d',
                         }}
                       >
-                        <div className="bg-[#CEC1A8] rounded-2xl shadow-2xl overflow-hidden border-2 border-[#673E20] p-2">
-                          
+                        <div className="bg-[#CFC0A9] rounded-2xl shadow-2xl overflow-hidden border-2 border-black p-2">
                           {/* Image Section */}
-                          <div className="relative h-80 sm:h-64 bg-[#CEC1A8]">
+                          <div className="relative h-80 sm:h-64 bg-[#CFC0A9] rounded-2xl overflow-hidden">
                             {item.isOutOfStock && (
-                            <div className="absolute top-2 left-2 bg-red-500 text-white px-2 py-1 rounded-md font-bold text-md font-heading2">
-                              Out of Stock
-                            </div>
-                          )}
+                              <div className="absolute top-2 left-2 bg-red-500 text-white px-2 py-1 rounded-md text-md font-medium work-sans ">
+                                Out of Stock
+                              </div>
+                            )}
                             <img
                               src={item.imageUrl}
                               alt={item.name}
@@ -365,16 +447,46 @@ const MobileMenuDisplay: React.FC<MobileMenuDisplayProps> = ({ categories, items
                           </div>
                           
                           {/* Content Section */}
-                          <div className="p-6 xs:p-4 bg-[#CEC1A8] hover:bg-[#B59E7D]">
+                          <div className="p-6 xs:p-4 bg-[#CFC0A9] hover:bg-[#B59E7D]">
                             <div className="flex justify-between items-start mb-3">
-                              <h3 className="text-xl xs:text-lg font-bold font-heading text-black flex-1">{item.name}</h3>
+                              <h3 className="text-xl xs:text-lg font-bold work-sans text-black flex-1">{item.name}</h3>
                               <div className="ml-4 text-right">
-                                <p className="text-2xl xs:text-xl font-bold text-[#451C06] font-heading">
-                                  ₹{item.price.toFixed(2)}
+                                <p className="text-2xl xs:text-xl font-bold text-[#451C06] work-sans">
+                                  €{item.price.toFixed(2)}
                                 </p>
                               </div>
                             </div>
-                            <p className="text-black text-base xs:text-sm font-body leading-relaxed ">
+                            {/* Varieties Swipe Section */}
+                            {item.varieties && item.varieties.length > 0 && (
+                              <div
+                                className="relative flex items-center justify-between gap-3 mb-1"
+                                onTouchStart={(e) => handleVarietyTouchStart(e, item._id)}
+                                onTouchMove={handleVarietyTouchMove}
+                                onTouchEnd={() => handleVarietyTouchEnd(item._id, item.varieties!.length)}
+                                onMouseDown={(e) => handleVarietyMouseDown(e, item._id)}
+                                onMouseMove={handleVarietyMouseMove}
+                                onMouseUp={() => handleVarietyMouseUp(item._id, item.varieties!.length)}
+                                onMouseLeave={() => {
+                                  if (isVarietyDragging && activeVarietyItemId === item._id) {
+                                    handleVarietyMouseUp(item._id, item.varieties!.length);
+                                  }
+                                }}
+                              >
+                                <div
+                                  className="flex-1 text-center text-sm xs:text-base font-medium  work-sans border-2 border-[#FCEDD6] rounded-xl py-1 bg-[#512915] text-white transition-all duration-300 ease-out flex items-center justify-between px-2"
+                                  style={{
+                                    transform: `translateX(${activeVarietyItemId === item._id ? varietyDragOffset / 2 : 0}px)`,
+                                    opacity: activeVarietyItemId === item._id && isVarietyDragging ? 0.7 : 1,
+                                  }}
+                                >
+                                  {item.varieties[currentVarietyIndex[item._id] || 0].name} (€{item.varieties[currentVarietyIndex[item._id] || 0].additionalPrice.toFixed(2)})
+                                  <div className="flex justify-center items-center">
+                                    <BiRightArrow className="text-sm" />
+                                  </div>
+                                </div>
+                              </div>
+                            )}
+                            <p className="text-black text-base xs:text-sm font-regular work-sans ">
                               ~ {item.description}
                             </p>
                           </div>
@@ -385,8 +497,8 @@ const MobileMenuDisplay: React.FC<MobileMenuDisplayProps> = ({ categories, items
                 </div>
               </div>
 
-               {/* Card indicator dots */}
-              <div className="flex justify-center gap-2 mb-6 -mt-10">
+              {/* Card indicator dots */}
+              <div className="flex justify-center gap-2 mb-6 ">
                 {filteredItems.map((_, index) => (
                   <div
                     key={index}
@@ -400,7 +512,7 @@ const MobileMenuDisplay: React.FC<MobileMenuDisplayProps> = ({ categories, items
               </div>
 
               {/* Swipe instruction */}
-              <div className="text-center font-body  text-sm xs:text-md text-gray-900">
+              <div className="text-center font-regular work-sans text-sm xs:text-md text-gray-900">
                 Swipe left or right to browse items
               </div>
             </div>

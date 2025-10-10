@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { motion, AnimatePresence, type Variants } from 'framer-motion';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import type { Category, MenuItem } from '../types';
 import AnimatedSplashScreenforcustomer from '../Pages/AnimatedSplashScreenforcustomer';
 import MobileMenuDisplay from './MobileMenuDisplay';
@@ -11,6 +12,7 @@ const MenuDisplay: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  const [currentVarietyIndex, setCurrentVarietyIndex] = useState<{ [key: string]: number }>({});
   const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
   useEffect(() => {
@@ -36,21 +38,35 @@ const MenuDisplay: React.FC = () => {
         }
       } catch (error) {
         console.error('Error fetching data:', error);
-      } finally {
-        setTimeout(() => {
-          setLoading(false);
-        }, 3000);
       }
     };
     fetchData();
   }, [VITE_BACKEND_URL]);
 
+  const handleSplashScreenComplete = () => {
+    setLoading(false);
+  };
+
   const handleCategoryClick = (categoryId: string) => {
     setSelectedCategory(categoryId);
   };
 
+  const prevVariety = (itemId: string, totalVarieties: number) => {
+    setCurrentVarietyIndex((prev) => ({
+      ...prev,
+      [itemId]: (prev[itemId] || 0) - 1 < 0 ? totalVarieties - 1 : (prev[itemId] || 0) - 1
+    }));
+  };
+
+  const nextVariety = (itemId: string, totalVarieties: number) => {
+    setCurrentVarietyIndex((prev) => ({
+      ...prev,
+      [itemId]: (prev[itemId] || 0) + 1 >= totalVarieties ? 0 : (prev[itemId] || 0) + 1
+    }));
+  };
+
   if (loading) {
-    return <AnimatedSplashScreenforcustomer />;
+    return <AnimatedSplashScreenforcustomer onComplete={handleSplashScreenComplete} />;
   }
 
   if (isMobile) {
@@ -217,6 +233,38 @@ const MenuDisplay: React.FC = () => {
                               <h2 className="text-lg font-bold mb-2">{item.name}</h2>
                               <p className="font-bold text-xl text-black mb-2">₹{item.price.toFixed(2)}</p>
                             </div>
+                            {item.varieties && item.varieties.length > 0 && (
+                              <div className="flex items-center justify-between gap-2 mb-2">
+                                <motion.button
+                                  whileHover={{ scale: 1.1 }}
+                                  whileTap={{ scale: 0.95 }}
+                                  onClick={() => prevVariety(item._id, item.varieties!.length)}
+                                  className="bg-[#673E20] text-white p-1.5 rounded-lg hover:bg-[#8B5A2B] transition-colors"
+                                  type="button"
+                                >
+                                  <ChevronLeft size={18} />
+                                </motion.button>
+                                <motion.div
+                                  key={currentVarietyIndex[item._id] || 0}
+                                  initial={{ opacity: 0, x: 20 }}
+                                  animate={{ opacity: 1, x: 0 }}
+                                  exit={{ opacity: 0, x: -20 }}
+                                  transition={{ duration: 0.2 }}
+                                  className="text-sm text-black font-body flex-1 text-center"
+                                >
+                                  {item.varieties[currentVarietyIndex[item._id] || 0].name} (+₹{item.varieties[currentVarietyIndex[item._id] || 0].additionalPrice.toFixed(2)})
+                                </motion.div>
+                                <motion.button
+                                  whileHover={{ scale: 1.1 }}
+                                  whileTap={{ scale: 0.95 }}
+                                  onClick={() => nextVariety(item._id, item.varieties!.length)}
+                                  className="bg-[#673E20] text-white p-1.5 rounded-lg hover:bg-[#8B5A2B] transition-colors"
+                                  type="button"
+                                >
+                                  <ChevronRight size={18} />
+                                </motion.button>
+                              </div>
+                            )}
                             <p className="text-black text-md">~ {item.description}</p>
                           </div>
                         </motion.div>

@@ -7,7 +7,11 @@ const menuItemSchema = new mongoose.Schema({
   imageUrl: { type: String, required: true },
   imagePublicId: { type: String, required: true },
   categoryId: { type: mongoose.Schema.Types.ObjectId, ref: 'Category', required: true },
-  isOutOfStock: { type: Boolean, default: false } // New field for out-of-stock status
+  isOutOfStock: { type: Boolean, default: false },
+  varieties: [{
+    name: { type: String, required: true },
+    additionalPrice: { type: Number, required: true, default: 0 }
+  }]
 });
 
 module.exports = mongoose.model('MenuItem', menuItemSchema);

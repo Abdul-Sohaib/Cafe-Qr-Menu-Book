@@ -19,6 +19,7 @@ const MenuItemList: React.FC<MenuItemListProps> = ({ token, onItemUpdated, onEdi
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [itemToDelete, setItemToDelete] = useState<string | null>(null);
+  const [currentVarietyIndex, setCurrentVarietyIndex] = useState<{ [key: string]: number }>({});
   const navigate = useNavigate();
   const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -97,6 +98,13 @@ const MenuItemList: React.FC<MenuItemListProps> = ({ token, onItemUpdated, onEdi
     }
   };
 
+  const nextVariety = (itemId: string, totalVarieties: number) => {
+    setCurrentVarietyIndex((prev) => ({
+      ...prev,
+      [itemId]: (prev[itemId] || 0) + 1 >= totalVarieties ? 0 : (prev[itemId] || 0) + 1
+    }));
+  };
+
   return (
     <div className="mb-8">
       <h2 className="text-2xl font-bold mb-4 font-heading">Menu Items</h2>
@@ -165,9 +173,19 @@ const MenuItemList: React.FC<MenuItemListProps> = ({ token, onItemUpdated, onEdi
                             <h3 className="text-lg font-bold font-heading">{item.name}</h3>
                             <p className="text-gray-600 font-heading font-bold">${item.price.toFixed(2)}</p>
                           </div>
+                          {item.varieties && item.varieties.length > 0 && (
+                            <div className="relative">
+                              <div 
+                                className="text-sm text-gray-600 font-body cursor-pointer"
+                                onClick={() => item.varieties && nextVariety(item._id, item.varieties.length)}
+                              >
+                                {item.varieties[currentVarietyIndex[item._id] || 0].name} (+${item.varieties[currentVarietyIndex[item._id] || 0].additionalPrice.toFixed(2)})
+                              </div>
+                            </div>
+                          )}
                           <p className="text-gray-500 text-sm font-body">{item.description}</p>
                         </div>
-                        <div className="flex justify-end mt-4 space-x-2 w-full ">
+                        <div className="flex justify-end mt-4 space-x-2 w-full">
                           <button
                             onClick={() => handleEdit(item)}
                             className="text-blue-500 hover:text-blue-700"
@@ -189,17 +207,16 @@ const MenuItemList: React.FC<MenuItemListProps> = ({ token, onItemUpdated, onEdi
                           >
                             <div>
                               {item.isOutOfStock ? 
-                              <div className='flex items-center gap-1 border-2 border-red-900 p-1 rounded-lg'>
-                              <span className='text-red-500 font-heading2 font-bold'>Out of Stock</span> 
-                              <FaExclamationCircle className='w-4 text-black'/>
-                              </div>
-                              :
-                              <div className='flex items-center gap-1 border-2 border-green-900 p-1 rounded-lg'> 
-                              <span className='text-green-600 font-heading2 font-bold'>In Stock</span>
-                              <CheckCircle className='w-4 text-black'/>
-                              </div>
+                                <div className='flex items-center gap-1 border-2 border-red-900 p-1 rounded-lg'>
+                                  <span className='text-red-500 font-heading2 font-bold'>Out of Stock</span> 
+                                  <FaExclamationCircle className='w-4 text-black'/>
+                                </div>
+                                :
+                                <div className='flex items-center gap-1 border-2 border-green-900 p-1 rounded-lg'> 
+                                  <span className='text-green-600 font-heading2 font-bold'>In Stock</span>
+                                  <CheckCircle className='w-4 text-black'/>
+                                </div>
                               }
-                            
                             </div>
                           </button>
                         </div>

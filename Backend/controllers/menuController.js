@@ -131,7 +131,7 @@ const getMenuItems = async (req, res) => {
 
 const createMenuItem = async (req, res) => {
   try {
-    const { name, price, description, categoryId } = req.body;
+    const { name, price, description, categoryId, varieties } = req.body;
 
     if (!name || !price || !description || !categoryId) {
       return res.status(400).json({ message: 'Name, price, description, and category are required' });
@@ -159,6 +159,8 @@ const createMenuItem = async (req, res) => {
       bufferStream.pipe(uploadStream);
     });
 
+    const parsedVarieties = varieties ? JSON.parse(varieties) : [];
+
     const menuItem = new MenuItem({
       name,
       price: parseFloat(price),
@@ -166,7 +168,8 @@ const createMenuItem = async (req, res) => {
       categoryId,
       imageUrl: result.secure_url,
       imagePublicId: result.public_id,
-      isOutOfStock: false
+      isOutOfStock: false,
+      varieties: parsedVarieties
     });
 
     await menuItem.save();
@@ -180,8 +183,14 @@ const createMenuItem = async (req, res) => {
 const updateMenuItem = async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, price, description, categoryId } = req.body;
-    const updateData = { name, price: parseFloat(price), description, categoryId };
+    const { name, price, description, categoryId, varieties } = req.body;
+    const updateData = { 
+      name, 
+      price: parseFloat(price), 
+      description, 
+      categoryId,
+      varieties: varieties ? JSON.parse(varieties) : []
+    };
 
     if (!name || !price || !description || !categoryId) {
       return res.status(400).json({ message: 'Name, price, description, and category are required' });

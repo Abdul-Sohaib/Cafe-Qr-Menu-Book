@@ -17,7 +17,13 @@ screens: {
   'xs': { 'min': '300px', 'max': '600px' },   // applies from 300px to 600px only
   'sm': { 'min': '601px' },                   // ≥ 601px
   'md': { 'min': '768px' },                   // ≥ 768px                // ≥ 1920px
-}
+},
+      colors: {
+        primary: '#FCEDD6', // Example primary color
+        secondary: '#E2C4A8',
+        tertiary: '#CFC0A9',
+        textcolour: '#512915' // Example text color
+      },
 
     },
   },
