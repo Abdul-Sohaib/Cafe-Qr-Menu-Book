@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import type { Category, MenuItem } from '../types';
 import logo from '../assets/cafe-logo.png';
-import { MdOutlineKeyboardDoubleArrowRight } from "react-icons/md";
+import { MdKeyboardDoubleArrowUp } from "react-icons/md";
 
 interface MobileMenuDisplayProps {
   categories: Category[];
@@ -482,7 +482,7 @@ const MobileMenuDisplay: React.FC<MobileMenuDisplayProps> = ({ categories, items
                                   {item.varieties[currentVarietyIndex[item._id] || 0].name} (€{item.varieties[currentVarietyIndex[item._id] || 0].additionalPrice.toFixed(2)})
                                   <div className="flex justify-center items-center">
                                     <span className='text-xs work-sans'>Swipe</span>
-                                    <MdOutlineKeyboardDoubleArrowRight className="text-sm transform rotate-90" />
+                                    <MdKeyboardDoubleArrowUp className="text-sm transform rotate-90" />
                                   </div>
                                 </div>
                               </div>

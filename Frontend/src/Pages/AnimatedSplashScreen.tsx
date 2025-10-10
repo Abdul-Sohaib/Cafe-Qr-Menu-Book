@@ -76,7 +76,7 @@ const AnimatedSplashScreen = () => {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.8, duration: 0.6 }}
           >
-            of Cafe Delight
+            of 7 Gramm
           </motion.p>
         </motion.div>
 
