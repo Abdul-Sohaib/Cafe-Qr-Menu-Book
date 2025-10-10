@@ -23,15 +23,6 @@ html::-webkit-scrollbar,
 body::-webkit-scrollbar {
   display: none;               /* Chrome, Safari */
 }
-
-.great-vibes-regular {
-  font-family: "Great Vibes", cursive;
-  font-weight: 400;
-  font-style: normal;
-}
-
-
-
 .work-sans {
   font-family: "Work Sans", sans-serif;
   font-optical-sizing: auto;
