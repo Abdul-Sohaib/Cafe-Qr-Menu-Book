@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import type { Category, MenuItem } from '../types';
 import logo from '../assets/cafe-logo.png';
-import { BiRightArrow } from 'react-icons/bi';
+import { MdOutlineKeyboardDoubleArrowRight } from "react-icons/md";
 
 interface MobileMenuDisplayProps {
   categories: Category[];
@@ -473,7 +473,7 @@ const MobileMenuDisplay: React.FC<MobileMenuDisplayProps> = ({ categories, items
                                 }}
                               >
                                 <div
-                                  className="flex-1 text-center text-sm xs:text-base font-medium  work-sans border-2 border-[#FCEDD6] rounded-xl py-1 bg-[#512915] text-white transition-all duration-300 ease-out flex items-center justify-between px-2"
+                                  className="flex-1 text-center text-sm xs:text-base font-medium  work-sans  rounded-lg py-1 bg-[#9f836abb] text-black transition-all duration-300 ease-out flex items-center justify-between px-2"
                                   style={{
                                     transform: `translateX(${activeVarietyItemId === item._id ? varietyDragOffset / 2 : 0}px)`,
                                     opacity: activeVarietyItemId === item._id && isVarietyDragging ? 0.7 : 1,
@@ -481,7 +481,8 @@ const MobileMenuDisplay: React.FC<MobileMenuDisplayProps> = ({ categories, items
                                 >
                                   {item.varieties[currentVarietyIndex[item._id] || 0].name} (€{item.varieties[currentVarietyIndex[item._id] || 0].additionalPrice.toFixed(2)})
                                   <div className="flex justify-center items-center">
-                                    <BiRightArrow className="text-sm" />
+                                    <span className='text-xs work-sans'>Swipe</span>
+                                    <MdOutlineKeyboardDoubleArrowRight className="text-sm" />
                                   </div>
                                 </div>
                               </div>
