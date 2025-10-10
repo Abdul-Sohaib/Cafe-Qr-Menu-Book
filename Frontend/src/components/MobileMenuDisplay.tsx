@@ -482,7 +482,7 @@ const MobileMenuDisplay: React.FC<MobileMenuDisplayProps> = ({ categories, items
                                   {item.varieties[currentVarietyIndex[item._id] || 0].name} (€{item.varieties[currentVarietyIndex[item._id] || 0].additionalPrice.toFixed(2)})
                                   <div className="flex justify-center items-center">
                                     <span className='text-xs work-sans'>Swipe</span>
-                                    <MdKeyboardDoubleArrowUp className="text-sm transform rotate-90" />
+                                    <MdKeyboardDoubleArrowUp className="text-sm " />
                                   </div>
                                 </div>
                               </div>
