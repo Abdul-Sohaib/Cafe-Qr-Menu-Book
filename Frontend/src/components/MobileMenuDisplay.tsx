@@ -262,7 +262,7 @@ const MobileMenuDisplay: React.FC<MobileMenuDisplayProps> = ({ categories, items
       
       {/* Categories Carousel Section */}
       <div className="mb-6">
-        <h2 className="text-xl xs:text-xl work-sans font-semibold text-center mb-4">Categories</h2>
+        <h2 className="text-xl xs:text-2xl work-sans font-semibold text-center mb-4">Categories</h2>
         
         {/* Category indicator dots */}
         <div className="flex justify-center gap-2 mb-4">
@@ -281,7 +281,7 @@ const MobileMenuDisplay: React.FC<MobileMenuDisplayProps> = ({ categories, items
         {/* Swipeable category carousel */}
         <div className="overflow-hidden relative h-32 xs:h-24">
           <div
-            className="relative w-full h-full"
+            className="relative w-full h-full "
             onTouchStart={handleCategoryTouchStart}
             onTouchMove={handleCategoryTouchMove}
             onTouchEnd={handleCategoryTouchEnd}
@@ -343,14 +343,14 @@ const MobileMenuDisplay: React.FC<MobileMenuDisplayProps> = ({ categories, items
       {/* Items Section */}
       {selectedCategory && (
         <div className="mt-20">
-          <h2 className="text-2xl xs:text-4xl work-sans font-bold  text-center">
+          <h2 className="text-2xl xs:text-4xl work-sans font-bold  text-center sketch-border2">
             {categories.find((c) => c._id === selectedCategory)?.name}
           </h2>
           
           {filteredItems.length === 0 ? (
             <div className="text-center work-sans text-gray-500 py-8 xs:text-md">No items in this category</div>
           ) : (
-            <div className="relative">
+            <div className="relative width">
               {/* Swipeable card container - Stack layout */}
               <div className=" flex justify-center bottom-60 right-[11rem] relative items-center mx-auto" style={{ minHeight: '550px', width: '100%' }}>
                 <div
@@ -447,9 +447,9 @@ const MobileMenuDisplay: React.FC<MobileMenuDisplayProps> = ({ categories, items
                           </div>
                           
                           {/* Content Section */}
-                          <div className="p-6 xs:p-4 bg-[#CFC0A9] hover:bg-[#B59E7D]">
+                          <div className="p-6 xs:p-4 bg-transparent">
                             <div className="flex justify-between items-start mb-3">
-                              <h3 className="text-xl xs:text-lg font-bold work-sans text-black flex-1">{item.name}</h3>
+                              <h3 className="text-xl xs:text-[1.2rem] font-bold work-sans text-black flex-1">{item.name}</h3>
                               <div className="ml-4 text-right">
                                 <p className="text-2xl xs:text-xl font-bold text-[#451C06] work-sans">
                                   €{item.price.toFixed(2)}
@@ -473,7 +473,7 @@ const MobileMenuDisplay: React.FC<MobileMenuDisplayProps> = ({ categories, items
                                 }}
                               >
                                 <div
-                                  className="flex-1 text-center text-sm xs:text-base font-medium work-sans rounded-lg py-1 bg-[#9f836abb] text-black transition-all duration-300 ease-out flex items-center justify-between px-2"
+                                  className="flex-1 text-center text-sm xs:text-[1rem] xs:font-bold  font-medium work-sans rounded-lg py-1 bg-[#9f836abb] text-black transition-all duration-300 ease-out flex items-center justify-between px-2"
                                   style={{
                                     transform: `translateY(${activeVarietyItemId === item._id ? varietyDragOffset / 2 : 0}px)`,
                                     opacity: activeVarietyItemId === item._id && isVarietyDragging ? 0.7 : 1,
