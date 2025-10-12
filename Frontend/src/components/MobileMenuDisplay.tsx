@@ -2,6 +2,7 @@ import { useState } from 'react';
 import type { Category, MenuItem } from '../types';
 import logo from '../assets/cafe-logo.png';
 import { MdKeyboardDoubleArrowUp } from "react-icons/md";
+import ImageLoader from './ImageLoader';
 
 interface MobileMenuDisplayProps {
   categories: Category[];
@@ -126,14 +127,14 @@ const MobileMenuDisplay: React.FC<MobileMenuDisplayProps> = ({ categories, items
   };
 
   const handleVarietyTouchStart = (e: React.TouchEvent, itemId: string) => {
-    setVarietyTouchStart(e.touches[0].clientY); // Changed to clientY for vertical swipe
+    setVarietyTouchStart(e.touches[0].clientY);
     setIsVarietyDragging(true);
     setActiveVarietyItemId(itemId);
   };
 
   const handleVarietyTouchMove = (e: React.TouchEvent) => {
     if (!isVarietyDragging || !activeVarietyItemId) return;
-    const currentTouch = e.touches[0].clientY; // Changed to clientY
+    const currentTouch = e.touches[0].clientY;
     const diff = currentTouch - varietyTouchStart;
     setVarietyDragOffset(diff);
     setVarietyTouchEnd(currentTouch);
@@ -146,9 +147,9 @@ const MobileMenuDisplay: React.FC<MobileMenuDisplayProps> = ({ categories, items
 
     if (Math.abs(distance) > minSwipeDistance) {
       if (distance > 0) {
-        handleVarietySwipe(itemId, totalVarieties, 'next'); // Swipe down
+        handleVarietySwipe(itemId, totalVarieties, 'next');
       } else if (distance < 0) {
-        handleVarietySwipe(itemId, totalVarieties, 'prev'); // Swipe up
+        handleVarietySwipe(itemId, totalVarieties, 'prev');
       }
     }
     setVarietyDragOffset(0);
@@ -156,14 +157,14 @@ const MobileMenuDisplay: React.FC<MobileMenuDisplayProps> = ({ categories, items
   };
 
   const handleVarietyMouseDown = (e: React.MouseEvent, itemId: string) => {
-    setVarietyTouchStart(e.clientY); // Changed to clientY
+    setVarietyTouchStart(e.clientY);
     setIsVarietyDragging(true);
     setActiveVarietyItemId(itemId);
   };
 
   const handleVarietyMouseMove = (e: React.MouseEvent) => {
     if (!isVarietyDragging || !activeVarietyItemId) return;
-    const currentPos = e.clientY; // Changed to clientY
+    const currentPos = e.clientY;
     const diff = currentPos - varietyTouchStart;
     setVarietyDragOffset(diff);
     setVarietyTouchEnd(currentPos);
@@ -176,9 +177,9 @@ const MobileMenuDisplay: React.FC<MobileMenuDisplayProps> = ({ categories, items
 
     if (Math.abs(distance) > minSwipeDistance) {
       if (distance > 0) {
-        handleVarietySwipe(itemId, totalVarieties, 'next'); // Swipe down
+        handleVarietySwipe(itemId, totalVarieties, 'next');
       } else if (distance < 0) {
-        handleVarietySwipe(itemId, totalVarieties, 'prev'); // Swipe up
+        handleVarietySwipe(itemId, totalVarieties, 'prev');
       }
     }
     setVarietyDragOffset(0);
@@ -318,13 +319,11 @@ const MobileMenuDisplay: React.FC<MobileMenuDisplayProps> = ({ categories, items
                         : 'bg-[#CEC1A8]'
                     }`}
                   >
-                    <img
+                    <ImageLoader
                       src={category.imageUrl}
                       alt={category.name}
                       className="w-20 xs:w-28 h-20 xs:h-20 object-cover rounded-lg border border-[#673E20]"
-                      onError={(e) => {
-                        e.currentTarget.src = '/placeholder-image.jpg';
-                      }}
+                      loaderClassName="w-20 xs:w-28 h-20 xs:h-20 rounded-lg"
                     />
                     <h3 className="text-lg xs:text-2xl font-medium text-center w-full work-sans">{category.name}</h3>
                   </div>
@@ -378,7 +377,7 @@ const MobileMenuDisplay: React.FC<MobileMenuDisplayProps> = ({ categories, items
                     if (isDragging && isActive) {
                       // Active card being dragged
                       const dragPercent = dragOffset / window.innerWidth;
-                      const rotateY = dragPercent * 15; // Rotation effect
+                      const rotateY = dragPercent * 15;
                       transform = `translateX(${dragOffset}px) translateY(0px) scale(1) rotateY(${rotateY}deg)`;
                       zIndex = 50;
                       opacity = 1;
@@ -430,20 +429,18 @@ const MobileMenuDisplay: React.FC<MobileMenuDisplayProps> = ({ categories, items
                           {/* Image Section */}
                           <div className="relative h-80 sm:h-64 bg-[#CFC0A9] rounded-2xl overflow-hidden">
                             {item.isOutOfStock && (
-                              <div className="absolute top-2 left-2 bg-red-500 text-white px-2 py-1 rounded-md text-md font-medium work-sans ">
+                              <div className="absolute top-2 left-2 bg-red-500 text-white px-2 py-1 rounded-md text-md font-medium work-sans z-10">
                                 Out of Stock
                               </div>
                             )}
-                            <img
+                            <ImageLoader
                               src={item.imageUrl}
                               alt={item.name}
                               className="w-full h-full object-cover rounded-2xl"
-                              onError={(e) => {
-                                e.currentTarget.src = '/placeholder-image.jpg';
-                              }}
+                              loaderClassName="w-full h-full"
                             />
                             {/* Gradient overlay at bottom */}
-                            <div className="absolute bottom-0 left-0 right-0 h-24 sm:h-20 bg-gradient-to-t from-black/60 to-transparent"></div>
+                            <div className="absolute bottom-0 left-0 right-0 h-24 sm:h-20 bg-gradient-to-t from-black/60 to-transparent pointer-events-none"></div>
                           </div>
                           
                           {/* Content Section */}

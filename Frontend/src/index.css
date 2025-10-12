@@ -43,9 +43,24 @@ body::-webkit-scrollbar {
   position: absolute;
   right: 0;
   bottom: 6px;
-  rotate: calc(-4deg);
+  rotate: calc(-3deg);
   width: 55%;
   height: 8px;
-  background: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='16' preserveAspectRatio='none'%3E%3Cpath d='M2 16 Q59 9 100 15 T220 19 T316 19 T400 19 T520 30' stroke='black' stroke-width='2.1' fill='transparent' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat center bottom;
+  background: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='16' preserveAspectRatio='none'%3E%3Cpath d='M2 20 Q20 8 100 15 T200 19 T316 30 T400 19 T520 30' stroke='black' stroke-width='4' fill='transparent' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat center bottom;
   background-size: 100% 100%;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@layer utilities {
+  .animate-shimmer {
+    animation: shimmer 2s infinite;
+  }
 }
