@@ -12,7 +12,7 @@ const app = express();
 
 // CORS configuration - MUST be before other middleware
 app.use(cors({
-  origin: ['https://7gramm.netlify.app', 'http://localhost:5173','https://7grammbook.netlify.app'],
+  origin: ['https://7grammbook.netlify.app', 'http://localhost:5173'],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'], // Added PATCH
   allowedHeaders: ['Content-Type', 'Authorization']
