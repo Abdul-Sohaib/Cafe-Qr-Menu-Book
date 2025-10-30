@@ -64,3 +64,62 @@ body::-webkit-scrollbar {
     animation: shimmer 2s infinite;
   }
 }
+
+
+.mobile-book-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 1rem;
+  background-color: #FCEDD6;
+}
+
+.book.demo-book .page {
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Cover page custom gradient */
+.cover-page {
+  background-image: url(../src/assets/cafe-book-back.png);
+  background-size: cover;
+}
+
+/* Category index page */
+.category-index-page {
+  overflow-y: auto;
+}
+
+/* Item page – keep the same card look but fit inside the page */
+.item-page .bg-item {
+  height: 100%;
+  background-color: #CFC0A9;
+}
+
+/* Hide native scrollbars inside pages (optional) */
+.page::-webkit-scrollbar { display: none; }
+.page { -ms-overflow-style: none; scrollbar-width: none; }
+
+.demo-book {
+  border-radius: 8px;
+  background: white;
+  
+}
+
+.page {
+  background: white;
+  overflow: visible;
+  border-radius: 1rem;
+}
+
+.mobile-book-wrapper {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+ 
+}
+

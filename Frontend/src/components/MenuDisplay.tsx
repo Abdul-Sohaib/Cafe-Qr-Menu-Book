@@ -4,7 +4,7 @@ import { motion, AnimatePresence, type Variants } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import type { Category, MenuItem } from '../types';
 import AnimatedSplashScreenforcustomer from '../Pages/AnimatedSplashScreenforcustomer';
-import MobileMenuDisplay from './MobileMenuDisplay';
+import MobileMenuDisplay from './Mobilemenubook';
 
 const MenuDisplay: React.FC = () => {
   const [categories, setCategories] = useState<Category[]>([]);
