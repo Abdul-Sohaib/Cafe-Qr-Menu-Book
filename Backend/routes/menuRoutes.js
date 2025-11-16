@@ -30,12 +30,16 @@ const upload = multer({
 
 const router = express.Router();
 
+// Category routes
 router.get('/categories', getCategories);
 router.post('/categories', authMiddleware, upload.single('image'), createCategory);
 router.put('/categories/:id', authMiddleware, upload.single('image'), updateCategory);
 router.delete('/categories/:id', authMiddleware, deleteCategory);
 
+// Menu item routes
 router.get('/', getMenuItems);
+router.post('/', authMiddleware, createMenuItem); // ← MISSING ROUTE ADDED
+router.put('/:id', authMiddleware, updateMenuItem); // ← MISSING ROUTE ADDED
 router.delete('/:id', authMiddleware, deleteMenuItem);
 router.patch('/:id/toggle-stock', authMiddleware, toggleOutOfStock);
 
