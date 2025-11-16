@@ -54,7 +54,7 @@ const AnimatedSplashScreen = () => {
           transition={{ delay: 0.5, duration: 0.8 }}
         >
           <motion.h1
-            className="text-5xl md:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#552A0A] via-[#552A0A] to-[#552A0A] mb-4"
+            className="text-5xl md:text-6xl font-regular forum-regular text-black bg-clip-text bg-transparent mb-4"
             animate={{
               backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
             }}
@@ -71,12 +71,12 @@ const AnimatedSplashScreen = () => {
           </motion.h1>
           
           <motion.p
-            className="text-2xl md:text-3xl text-[#552A09] font-semibold"
+            className="text-2xl md:text-3xl text-black font-regular forum-regular"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.8, duration: 0.6 }}
           >
-            of 7 Gramm
+            of Open House CaffE
           </motion.p>
         </motion.div>
 

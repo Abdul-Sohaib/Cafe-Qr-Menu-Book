@@ -449,14 +449,14 @@ const MobileMenuDisplay: React.FC<MobileMenuDisplayProps> = ({ categories, items
                               <h3 className="text-xl xs:text-[1.2rem] font-bold work-sans text-black flex-1">{item.name}</h3>
                               <div className="ml-4 text-right">
                                 <p className="text-2xl xs:text-xl font-bold text-[#451C06] work-sans">
-                                  €{item.price.toFixed(2)}
+                                  ₹{item.price.toFixed(2)}
                                 </p>
                               </div>
                             </div>
                             {/* Varieties Swipe Section */}
                             {item.varieties && item.varieties.length > 0 && (
                               <div
-                                className="relative flex items-center justify-between gap-3 mb-1 overflow-hidden"
+                                className="relative flex items-center justify-between gap-3 overflow-hidden"
                                 onTouchStart={(e) => handleVarietyTouchStart(e, item._id)}
                                 onTouchMove={handleVarietyTouchMove}
                                 onTouchEnd={() => handleVarietyTouchEnd(item._id, item.varieties!.length)}
@@ -476,7 +476,7 @@ const MobileMenuDisplay: React.FC<MobileMenuDisplayProps> = ({ categories, items
                                     opacity: activeVarietyItemId === item._id && isVarietyDragging ? 0.7 : 1,
                                   }}
                                 >
-                                  {item.varieties[currentVarietyIndex[item._id] || 0].name} (€{item.varieties[currentVarietyIndex[item._id] || 0].additionalPrice.toFixed(2)})
+                                  {item.varieties[currentVarietyIndex[item._id] || 0].name} (₹{item.varieties[currentVarietyIndex[item._id] || 0].additionalPrice.toFixed(2)})
                                   <div className="flex justify-center items-center">
                                     <span className='text-xs work-sans'>Swipe</span>
                                     <MdKeyboardDoubleArrowUp className="text-sm " />
@@ -484,9 +484,6 @@ const MobileMenuDisplay: React.FC<MobileMenuDisplayProps> = ({ categories, items
                                 </div>
                               </div>
                             )}
-                            <p className="text-black text-base xs:text-sm font-regular work-sans ">
-                              ~ {item.description}
-                            </p>
                           </div>
                         </div>
                       </div>

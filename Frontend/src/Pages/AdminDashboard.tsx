@@ -8,6 +8,7 @@ import CategoryList from '../components/CategoryList';
 import MenuItemForm from '../components/MenuItemForm';
 import MenuItemList from '../components/MenuItemList';
 import OutOfStockItems from '../components/OutOfStockItems';
+import logo from '../assets/Logo.png';
 import AnimatedSplashScreen from './AnimatedSplashScreen';
 import type { Category, MenuItem } from '../types';
 
@@ -128,10 +129,16 @@ const AdminDashboard: React.FC = () => {
   }
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto p-4 adminbackground">
       {/* Header with QR Download and Logout */}
       <div className="flex justify-between items-center mb-8 flex-wrap gap-4">
-        <h1 className="text-5xl font-bold text-left flex-1 font-heading">Admin Dashboard</h1>
+        <div className='flex flex-col gap-2'>
+        <h1 className="text-5xl font-bold text-left flex-1 font-heading">Open House Caffe</h1>
+        <h1 className="text-4xl font-bold text-left flex-1 font-heading">Admin Dashboard</h1>
+        </div>
+        <div>
+          <img src={logo} alt="Logo" className='w-28'/>
+        </div>
         <div className="flex gap-3">
           <button
             onClick={handleDownloadQRCode}

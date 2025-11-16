@@ -36,8 +36,6 @@ router.put('/categories/:id', authMiddleware, upload.single('image'), updateCate
 router.delete('/categories/:id', authMiddleware, deleteCategory);
 
 router.get('/', getMenuItems);
-router.post('/', authMiddleware, upload.single('image'), createMenuItem);
-router.put('/:id', authMiddleware, upload.single('image'), updateMenuItem);
 router.delete('/:id', authMiddleware, deleteMenuItem);
 router.patch('/:id/toggle-stock', authMiddleware, toggleOutOfStock);
 

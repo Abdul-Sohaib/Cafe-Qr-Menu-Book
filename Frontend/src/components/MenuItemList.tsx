@@ -154,24 +154,16 @@ const MenuItemList: React.FC<MenuItemListProps> = ({ token, onItemUpdated, onEdi
                       return (typeof item.categoryId === 'string' ? item.categoryId : item.categoryId._id) === selectedCategory;
                     })
                     .map((item) => (
-                      <div key={item._id} className="bg-white p-2 rounded-lg shadow-lg border-2 border-[#552A0A] h-fit relative">
+                      <div key={item._id} className="bg-white p-4 rounded-lg shadow-lg border-2 border-[#552A0A] h-fit relative">
                         {item.isOutOfStock && (
-                          <div className="absolute top-2 left-2 bg-red-500 text-white px-2 py-1 rounded text-sm font-heading">
+                          <div className="absolute top-16 left-2 bg-red-500 text-white px-2 py-1 rounded text-sm font-heading">
                             Out of Stock
                           </div>
                         )}
-                        <img
-                          src={item.imageUrl}
-                          alt={item.name}
-                          className="w-full h-[20rem] object-cover rounded-lg mb-4"
-                          onError={(e) => {
-                            e.currentTarget.src = '/placeholder-image.jpg';
-                          }}
-                        />
                         <div className='flex flex-col gap-4'>
                           <div className='flex justify-between items-center'>
                             <h3 className="text-lg font-bold font-heading">{item.name}</h3>
-                            <p className="text-gray-600 font-heading font-bold">${item.price.toFixed(2)}</p>
+                            <p className="text-gray-600 font-heading font-bold">₹{item.price.toFixed(2)}</p>
                           </div>
                           {item.varieties && item.varieties.length > 0 && (
                             <div className="relative">
@@ -179,11 +171,10 @@ const MenuItemList: React.FC<MenuItemListProps> = ({ token, onItemUpdated, onEdi
                                 className="text-sm text-gray-600 font-body cursor-pointer"
                                 onClick={() => item.varieties && nextVariety(item._id, item.varieties.length)}
                               >
-                                {item.varieties[currentVarietyIndex[item._id] || 0].name} (+${item.varieties[currentVarietyIndex[item._id] || 0].additionalPrice.toFixed(2)})
+                                {item.varieties[currentVarietyIndex[item._id] || 0].name} (+₹{item.varieties[currentVarietyIndex[item._id] || 0].additionalPrice.toFixed(2)})
                               </div>
                             </div>
                           )}
-                          <p className="text-gray-500 text-sm font-body">{item.description}</p>
                         </div>
                         <div className="flex justify-end mt-4 space-x-2 w-full">
                           <button

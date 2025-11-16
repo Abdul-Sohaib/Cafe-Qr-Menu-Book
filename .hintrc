@@ -15,7 +15,9 @@
         "ignore": [
           "scrollbar-width",
           "scrollbar-width: none",
-          "image-rendering: crisp-edges"
+          "image-rendering: crisp-edges",
+          "mask-repeat",
+          "mask-size"
         ]
       }
     ],

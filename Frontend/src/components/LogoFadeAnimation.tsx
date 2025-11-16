@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { useEffect } from 'react';
-import logo from '../assets/cafe-logo.png';
+import logo from '../assets/Logo.png';
 
 interface LogoFadeAnimationProps {
   onComplete: () => void;

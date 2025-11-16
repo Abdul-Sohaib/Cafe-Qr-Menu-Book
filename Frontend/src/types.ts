@@ -2,6 +2,7 @@ export interface Category {
   _id: string;
   name: string;
   imageUrl: string;
+   quote?: string;
 }
 
 export interface MenuItem {

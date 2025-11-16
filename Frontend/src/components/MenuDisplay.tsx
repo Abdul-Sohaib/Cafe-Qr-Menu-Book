@@ -228,13 +228,13 @@ const MenuDisplay: React.FC = () => {
                               e.currentTarget.src = '/placeholder-image.jpg';
                             }}
                           />
-                          <div className='px-1 mb-2'>
-                            <div className='flex justify-between items-center'>
-                              <h2 className="text-lg font-bold mb-2">{item.name}</h2>
-                              <p className="font-bold text-xl text-black mb-2">₹{item.price.toFixed(2)}</p>
+                          <div className='px-1'>
+                            <div className='flex justify-between items-center mb-2'>
+                              <h2 className="text-lg font-bold">{item.name}</h2>
+                              <p className="font-bold text-xl text-black">₹{item.price.toFixed(2)}</p>
                             </div>
                             {item.varieties && item.varieties.length > 0 && (
-                              <div className="flex items-center justify-between gap-2 mb-2">
+                              <div className="flex items-center justify-between gap-2">
                                 <motion.button
                                   whileHover={{ scale: 1.1 }}
                                   whileTap={{ scale: 0.95 }}
@@ -265,7 +265,6 @@ const MenuDisplay: React.FC = () => {
                                 </motion.button>
                               </div>
                             )}
-                            <p className="text-black text-md">~ {item.description}</p>
                           </div>
                         </motion.div>
                       ))}

@@ -101,7 +101,7 @@ const AnimatedSplashScreenforcustomer: React.FC<AnimatedSplashScreenProps> = ({ 
                 transition={{ delay: 0.5, duration: 0.8 }}
               >
                 <motion.h1
-                  className="text-4xl md:text-6xl font-bold work-sans text-[#512915] mb-4"
+                  className="text-4xl md:text-6xl font-regular forum-regular text-black mb-4"
                   animate={{
                     backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
                   }}
@@ -118,7 +118,7 @@ const AnimatedSplashScreenforcustomer: React.FC<AnimatedSplashScreenProps> = ({ 
                 </motion.h1>
                 
                 <motion.p
-                  className="text-2xl md:text-3xl text-[#512915] font-bold work-sans"
+                  className="text-2xl md:text-3xl text-black font-regular forum-regular"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.8, duration: 0.6 }}
@@ -126,12 +126,12 @@ const AnimatedSplashScreenforcustomer: React.FC<AnimatedSplashScreenProps> = ({ 
                   To 
                 </motion.p>
                 <motion.p
-                  className="text-4xl md:text-5xl text-[#512915] font-semibold work-sans"
+                  className="text-4xl md:text-5xl text-black font-regular forum-regular"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.8, duration: 0.6 }}
                 >
-                  7 Gramm
+                  Open House CaffE
                 </motion.p>
               </motion.div>
 

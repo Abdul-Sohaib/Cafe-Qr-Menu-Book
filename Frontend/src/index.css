@@ -9,8 +9,14 @@ body {
   min-height: 100vh;      /* enable scrolling */
   scrollbar-width: none;       /* Firefox */
   -ms-overflow-style: none;    /* IE/Edge */
-  background-color: #FCEDD6;
+ background: linear-gradient(135deg, #E8DDD0 0%, #D9CFC2 50%, #CEC1A8 100%);
   /* Smooth neutral gradient background */
+}
+.customerbackground {
+ background-image: url(./assets/Menu_Background.png);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 /* Hide scrollbar for Chrome/Safari */
@@ -24,11 +30,12 @@ html::-webkit-scrollbar,
 body::-webkit-scrollbar {
   display: none;               /* Chrome, Safari */
 }
-.work-sans {
-  font-family: "Work Sans", sans-serif;
-  font-optical-sizing: auto;
+.forum-regular {
+  font-family: "Forum", serif;
+  font-weight: 400;
   font-style: normal;
 }
+
 
 .width{
   width: -webkit-fill-available;
@@ -120,6 +127,173 @@ body::-webkit-scrollbar {
   -webkit-user-select: none;
   -moz-user-select: none;
   user-select: none;
+  background-image: url(./assets/Menu_Background.png);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
  
+}
+
+.menubackgroundimage{
+  position: absolute;
+  top: 0;
+  right: -1rem;
+  width: 70%;
+  height: 100%;
+  overflow: hidden;
+  background-image: url(./assets/Coffee_illustration.png);
+  background-size: 70% 100%;
+  background-position: right center;
+  background-repeat: no-repeat;
+  filter: brightness(0.2) contrast(2); /* exposure control */
+  image-rendering: pixelated;            /* still supported if you want a stylized look */
+  z-index: 0;
+}
+.menuwelcomebackgroundimage {
+  position: relative;
+  background-image: url(./assets/fabric_texture.png);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  overflow: hidden;
+}
+
+/* Right-side SVG border */
+.menuwelcomebackgroundimage::after {
+  content: "";
+  position: absolute;
+  top: -2rem;
+  right: 0;
+  width: 40px; 
+  height: 102%;
+  background-image: url(./assets/Vertical_double_line_long.svg);
+  background-size: contain; 
+  background-repeat: no-repeat;
+  background-position: center right;
+  z-index: 10;
+}
+.horizintalborder {
+  position: absolute;
+  top: 7px;
+  left: 2rem;
+  width: 30%;                 /* narrower */
+  height: 90%;               /* taller */
+  background-image: url(./assets/Horizontal_double_line_long.svg);
+  background-size: auto auto; /* fits height perfectly */
+  background-repeat: no-repeat;
+  background-position: top;
+  z-index: 10;
+}
+.verticalborder{
+   position: absolute;
+  bottom: 3rem;
+  left: -2rem;
+  width: 40%;                 /* narrower */
+  height: 20%;               /* taller */
+  background-image: url(./assets/Vertical_double_line_long.svg);
+  background-size: auto auto; /* fits height perfectly */
+  background-repeat: no-repeat;
+  background-position: top;
+  z-index: 10;
+}
+
+.cornercut-container {
+  position: relative;
+  overflow: hidden; /* Ensures SVG corners stay clipped */
+}
+
+/* Top-right corner cut */
+.cornercut-container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: -3px;
+  width: 40px; /* adjust to fit */
+  height: 40px;
+  background-image: url(./assets/Corner_cutting.svg);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: top right;
+  z-index: 2;
+}
+
+/* Bottom-right corner cut */
+.cornercut-container::after {
+  content: "";
+  position: absolute;
+  bottom: -3px;
+  right: 0;
+  width: 40px; /* same size as above */
+  height: 40px;
+  rotate: 90deg;
+  background-image: url(./assets/Corner_cutting.svg);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: bottom right;
+  z-index: 2;
+}
+
+.bodycoverpagebg{
+  position: relative; /* required for pseudo-elements */
+  overflow: visible;
+  background-image: url('./assets/rope_texture.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  padding: 40px; /* give inner content room so borders don't overlap content */
+}
+
+/* Common rules for border pseudo-elements */
+.bodycoverpagebg::before,
+.bodycoverpagebg::after,
+.bodycoverpagebg .left-border,
+.bodycoverpagebg .right-border {
+  pointer-events: none;
+  position: absolute;
+  z-index: 10;
+  background-repeat: no-repeat;
+  background-size: contain;
+  content: "";
+}
+
+/* top border */
+.bodycoverpagebg::before{
+  top: 0.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 96%; /* short of full width so it looks nicer */
+  height: 36px; /* adjust thickness */
+  background-image: url('./assets/Horizontal_double_line_long.svg');
+}
+
+/* bottom border */
+.bodycoverpagebg::after{
+  bottom: -1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 96%;
+  height: 36px; /* adjust thickness */
+  background-image: url('./assets/Horizontal_double_line_long.svg');
+}
+
+/* left vertical border */
+/* left vertical border */
+.bodycoverpagebg .left-border{
+  top: 0.2rem; /* match the top border position */
+  bottom: -1.5rem; /* match the bottom border position */
+  left: 0.5rem;
+  width: 34px; /* adjust thickness */
+  height: calc(100% + 0rem); /* extend to touch both borders */
+  background-image: url('./assets/Adjusted_vertical_double_line.svg');
+}
+
+/* right vertical border */
+.bodycoverpagebg .right-border{
+  top: 0.2rem; /* match the top border position */
+  bottom: -1.5rem; /* match the bottom border position */
+  right: -1.3rem;
+  width: 36px;
+  height: calc(100% + 0rem); /* extend to touch both borders */
+  background-image: url('./assets/Adjusted_vertical_double_line.svg');
 }
 

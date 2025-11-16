@@ -19,6 +19,7 @@ const CategoryForm: React.FC<CategoryFormProps> = ({
   onCancelEdit,
 }) => {
   const [name, setName] = useState('');
+  const [quote, setQuote] = useState('');
   const [image, setImage] = useState<File | null>(null);
   const [error, setError] = useState('');
   const [currentImage, setCurrentImage] = useState<string | null>(null);
@@ -29,9 +30,11 @@ const CategoryForm: React.FC<CategoryFormProps> = ({
   useEffect(() => {
     if (editingCategory) {
       setName(editingCategory.name);
+      setQuote(editingCategory.quote || '');
       setCurrentImage(editingCategory.imageUrl);
     } else {
       setName('');
+      setQuote('');
       setCurrentImage(null);
       setImage(null);
     }
@@ -89,6 +92,7 @@ const CategoryForm: React.FC<CategoryFormProps> = ({
     setIsLoading(true);
     const formData = new FormData();
     formData.append('name', name);
+    formData.append('quote', quote);
     if (image) {
       formData.append('image', image);
     }
@@ -150,6 +154,20 @@ const CategoryForm: React.FC<CategoryFormProps> = ({
             className="w-full border border-black rounded-lg p-2 text-black bg-transparent font-heading2 placeholder:text-gray-500"
             placeholder="Enter category name"
             required
+          />
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-black mb-2  font-heading font-bold" htmlFor="quote">
+            Category Quote <span className="text-sm font-normal text-gray-600">(Optional)</span>
+          </label>
+          <textarea
+            id="quote"
+            value={quote}
+            onChange={(e) => setQuote(e.target.value)}
+            className="w-full border border-black rounded-lg p-2 text-black bg-transparent font-heading2 placeholder:text-gray-500"
+            placeholder="Enter an inspiring quote for this category (e.g., 'Pakora = Instant Happiness')"
+            rows={2}
           />
         </div>
 

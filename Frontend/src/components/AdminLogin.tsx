@@ -30,7 +30,10 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ onLogin }) => {
   return (
     <div className="flex items-center justify-center min-h-screen">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md border-2 border-[#552A0A]">
+        <div className="flex flex-col">
+        <h1 className="text-4xl font-bold font-heading mb-6 text-center">Open House Caffe</h1>
         <h2 className="text-3xl font-bold font-heading mb-6 text-center">Admin Login</h2>
+        </div>
         {error && <p className="text-red-500 mb-4">{error}</p>}
         <div>
           <div className="mb-4">
