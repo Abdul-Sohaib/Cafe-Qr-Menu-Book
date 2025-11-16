@@ -16,7 +16,7 @@ const { authMiddleware } = require('../middleware/authMiddleware');
 const storage = multer.memoryStorage();
 const upload = multer({
   storage,
-  limits: { fileSize: 5 * 1024 * 1024 },
+  limits: { fileSize: 10 * 1024 * 1024 },
   fileFilter: (req, file, cb) => {
     const filetypes = /jpeg|jpg|png/;
     const mimetype = filetypes.test(file.mimetype);
@@ -38,8 +38,8 @@ router.delete('/categories/:id', authMiddleware, deleteCategory);
 
 // Menu item routes
 router.get('/', getMenuItems);
-router.post('/', authMiddleware, createMenuItem); // ← MISSING ROUTE ADDED
-router.put('/:id', authMiddleware, updateMenuItem); // ← MISSING ROUTE ADDED
+router.post('/', authMiddleware, upload.none(), createMenuItem); // Added upload.none() for FormData
+router.put('/:id', authMiddleware, upload.none(), updateMenuItem); // Added upload.none() for FormData
 router.delete('/:id', authMiddleware, deleteMenuItem);
 router.patch('/:id/toggle-stock', authMiddleware, toggleOutOfStock);
 

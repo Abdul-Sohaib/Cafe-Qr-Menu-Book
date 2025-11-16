@@ -137,10 +137,10 @@ const getMenuItems = async (req, res) => {
 
 const createMenuItem = async (req, res) => {
   try {
-    const { name, price, categoryId, varieties } = req.body;
+    const { name, price, description, categoryId, varieties } = req.body;
 
-    if (!name || !price || !categoryId) {
-      return res.status(400).json({ message: 'Name, price, and category are required' });
+    if (!name || !price || !description || !categoryId) {
+      return res.status(400).json({ message: 'Name, price, description, and category are required' });
     }
 
     const category = await Category.findById(categoryId);
@@ -148,12 +148,32 @@ const createMenuItem = async (req, res) => {
       return res.status(400).json({ message: 'Invalid category ID' });
     }
 
+    if (!req.file) {
+      return res.status(400).json({ message: 'Image file is required' });
+    }
+
+    const result = await new Promise((resolve, reject) => {
+      const uploadStream = cloudinary.uploader.upload_stream(
+        { resource_type: 'image' },
+        (error, result) => {
+          if (error) reject(new Error('Image upload failed'));
+          else resolve(result);
+        }
+      );
+      const bufferStream = require('stream').PassThrough();
+      bufferStream.end(req.file.buffer);
+      bufferStream.pipe(uploadStream);
+    });
+
     const parsedVarieties = varieties ? JSON.parse(varieties) : [];
 
     const menuItem = new MenuItem({
       name,
       price: parseFloat(price),
+      description,
       categoryId,
+      imageUrl: result.secure_url,
+      imagePublicId: result.public_id,
       isOutOfStock: false,
       varieties: parsedVarieties
     });
@@ -169,21 +189,48 @@ const createMenuItem = async (req, res) => {
 const updateMenuItem = async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, price, categoryId, varieties } = req.body;
+    const { name, price, description, categoryId, varieties } = req.body;
     const updateData = { 
       name, 
       price: parseFloat(price), 
+      description, 
       categoryId,
       varieties: varieties ? JSON.parse(varieties) : []
     };
 
-    if (!name || !price || !categoryId) {
-      return res.status(400).json({ message: 'Name, price, and category are required' });
+    if (!name || !price || !description || !categoryId) {
+      return res.status(400).json({ message: 'Name, price, description, and category are required' });
     }
 
     const category = await Category.findById(categoryId);
     if (!category) {
       return res.status(400).json({ message: 'Invalid category ID' });
+    }
+
+    if (req.file) {
+      const existingItem = await MenuItem.findById(id);
+      if (!existingItem) {
+        return res.status(404).json({ message: 'Item not found' });
+      }
+      if (existingItem.imagePublicId) {
+        await cloudinary.uploader.destroy(existingItem.imagePublicId);
+      }
+
+      const result = await new Promise((resolve, reject) => {
+        const uploadStream = cloudinary.uploader.upload_stream(
+          { resource_type: 'image' },
+          (error, result) => {
+            if (error) reject(error);
+            else resolve(result);
+          }
+        );
+        const bufferStream = require('stream').PassThrough();
+        bufferStream.end(req.file.buffer);
+        bufferStream.pipe(uploadStream);
+      });
+
+      updateData.imageUrl = result.secure_url;
+      updateData.imagePublicId = result.public_id;
     }
 
     const updatedItem = await MenuItem.findByIdAndUpdate(id, updateData, { new: true }).populate('categoryId', 'name');
@@ -223,6 +270,10 @@ const deleteMenuItem = async (req, res) => {
     const deletedItem = await MenuItem.findById(id);
 
     if (!deletedItem) return res.status(404).json({ message: 'Item not found' });
+
+    if (deletedItem.imagePublicId) {
+      await cloudinary.uploader.destroy(deletedItem.imagePublicId);
+    }
 
     await MenuItem.findByIdAndDelete(id);
     res.json({ message: 'Item deleted successfully' });
