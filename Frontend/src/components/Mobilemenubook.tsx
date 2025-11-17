@@ -136,7 +136,7 @@ const Mobilemenubook: React.FC<MobileMenuBookProps> = ({ categories, items }) =>
                   {category.name}
                 </h2>
                 </div>
-                <div className='imagebasegradient flex p-1 gap-1 w-52   bg-gradient-to-r from-orange-400 to-orange-300 rounded-s-full relative left-[18vw]'>
+                <div className='imagebasegradient flex p-1 gap-1 w-52 quotebg rounded-s-full relative left-[18vw]'>
                   
                 {category.quote && (
                   <div className="category-quote forum-regular mt-2 pl-16">

@@ -242,3 +242,6 @@ body::-webkit-scrollbar {
   background-repeat: no-repeat;
 }
 
+.quotebg{
+  background: linear-gradient(45deg, #D55810 0%, #D88B5E 48%, #FF9900 100%)
+}
