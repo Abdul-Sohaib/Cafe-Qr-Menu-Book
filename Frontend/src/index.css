@@ -79,7 +79,7 @@ body::-webkit-scrollbar {
   align-items: center;
   min-height: 100vh;
   padding: 1rem;
-  background-color: #FCEDD6;
+   background-image: url(./assets/Menu_Background.png);
 }
 
 .book.demo-book .page {
@@ -240,60 +240,5 @@ body::-webkit-scrollbar {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  padding: 40px; /* give inner content room so borders don't overlap content */
-}
-
-/* Common rules for border pseudo-elements */
-.bodycoverpagebg::before,
-.bodycoverpagebg::after,
-.bodycoverpagebg .left-border,
-.bodycoverpagebg .right-border {
-  pointer-events: none;
-  position: absolute;
-  z-index: 10;
-  background-repeat: no-repeat;
-  background-size: contain;
-  content: "";
-}
-
-/* top border */
-.bodycoverpagebg::before{
-  top: 0.5rem;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 96%; /* short of full width so it looks nicer */
-  height: 36px; /* adjust thickness */
-  background-image: url('./assets/Horizontal_double_line_long.svg');
-}
-
-/* bottom border */
-.bodycoverpagebg::after{
-  bottom: -1.5rem;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 96%;
-  height: 36px; /* adjust thickness */
-  background-image: url('./assets/Horizontal_double_line_long.svg');
-}
-
-/* left vertical border */
-/* left vertical border */
-.bodycoverpagebg .left-border{
-  top: 0.2rem; /* match the top border position */
-  bottom: -1.5rem; /* match the bottom border position */
-  left: 0.5rem;
-  width: 34px; /* adjust thickness */
-  height: calc(100% + 0rem); /* extend to touch both borders */
-  background-image: url('./assets/Adjusted_vertical_double_line.svg');
-}
-
-/* right vertical border */
-.bodycoverpagebg .right-border{
-  top: 0.2rem; /* match the top border position */
-  bottom: -1.5rem; /* match the bottom border position */
-  right: -1.3rem;
-  width: 36px;
-  height: calc(100% + 0rem); /* extend to touch both borders */
-  background-image: url('./assets/Adjusted_vertical_double_line.svg');
 }
 
