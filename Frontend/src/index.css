@@ -174,7 +174,7 @@ body::-webkit-scrollbar {
 }
 .horizintalborder {
   position: absolute;
-  top: 7px;
+  top: 1rem;
   left: 2rem;
   width: 30%;                 /* narrower */
   height: 90%;               /* taller */
@@ -185,11 +185,11 @@ body::-webkit-scrollbar {
   z-index: 10;
 }
 .verticalborder{
-   position: absolute;
-  bottom: 3rem;
+  position: absolute;
+  bottom: 5rem;
   left: -2rem;
   width: 40%;                 /* narrower */
-  height: 20%;               /* taller */
+  height: 15%;               /* taller */
   background-image: url(./assets/Vertical_double_line_long.svg);
   background-size: auto auto; /* fits height perfectly */
   background-repeat: no-repeat;
@@ -242,6 +242,9 @@ body::-webkit-scrollbar {
   background-repeat: no-repeat;
 }
 
-.quotebg{
-  background: linear-gradient(45deg, #D55810 0%, #D88B5E 48%, #FF9900 100%)
+.quotebg {
+  background: linear-gradient(45deg, #D55810 0%, #D88B5E 48%, #FF9900 100%);
+  border: 2px solid transparent;
+  border-image: linear-gradient(90deg, #FF9900 0%, #F2743B 46%, #F1670B 100%);
+  border-image-slice: 1;
 }
