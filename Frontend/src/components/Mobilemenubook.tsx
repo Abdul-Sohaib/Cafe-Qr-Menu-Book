@@ -123,7 +123,8 @@ const Mobilemenubook: React.FC<MobileMenuBookProps> = ({ categories, items }) =>
       pages.push(
         <Page key={`cat-items-${category._id}-page-${pageIndex}`} className="category-items-page">
           <div className='h-full p-2 bodycoverpagebg flex flex-col gap-2   shadow-lg overflow-hidden'>
-          <div className="h-full p-[2px] bodycoverpagebg flex flex-col gap-2   shadow-lg overflow-hidden border-[3px] border-black">
+          <div className="h-full p-[2px] flex flex-col gap-2   shadow-lg overflow-hidden border-[3px] border-black">
+            <img src={logo} alt="" className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 h-36 w-32 opacity-25 pointer-events-none z-0" />
             <div className="flex flex-col h-full border-[3px] border-black p-3">
              <span className="left-border" aria-hidden="true"></span>
   <span className="right-border" aria-hidden="true"></span>
