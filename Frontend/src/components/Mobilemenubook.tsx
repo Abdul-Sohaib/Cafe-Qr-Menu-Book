@@ -144,7 +144,7 @@ const Mobilemenubook: React.FC<MobileMenuBookProps> = ({ categories, items }) =>
                   </div>
                 )}
                 </div>
-                <div className='absolute left-[27vw] top-[5.5vh]'>
+                <div className='absolute left-[30vw] top-[5.5vh]'>
                  <ImageLoader
                   src={category.imageUrl}
                   alt={category.name}
