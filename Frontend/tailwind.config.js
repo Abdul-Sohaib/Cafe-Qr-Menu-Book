@@ -8,9 +8,8 @@ export default {
     extend: {
 screens: {
   // xs now includes the custom range condition (300px to 600px)
-  'xs': { 'min': '300px', 'max': '600px' },   // applies from 300px to 600px only
-  'sm': { 'min': '601px' },                   // ≥ 601px
-  'md': { 'min': '768px' },                   // ≥ 768px                // ≥ 1920px
+  'xs': { 'min': '300px', 'max': '600px' },
+  'xs-small': { 'min': '360px', 'max': '480px' },
 },
     },
   },

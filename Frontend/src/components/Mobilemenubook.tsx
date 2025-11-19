@@ -59,11 +59,11 @@ const Mobilemenubook: React.FC<MobileMenuBookProps> = ({ categories, items }) =>
           <div className="horizintalborder"></div>
           <div className=" flex flex-col items-center justify-center pt-10">
         <img src={logo} alt="Cafe logo" className="w-28 xs:w-24 mb-6 drop-shadow-lg" />
-        <h1 className="text-5xl xs:text-4xl p-3 font-regular forum-regular uppercase text-black mb-4">
+        <h1 className="text-5xl xs:text-4xl xs-small:text-3xl p-3 font-regular forum-regular uppercase text-black mb-4">
            Open House caffe
         </h1>
         <div>
-          <img src={welcomemenimg} alt="Welcome illustration" className='w-36 xs:w-24  drop-shadow-lg' />
+          <img src={welcomemenimg} alt="Welcome illustration" className='w-36 xs:w-28 xs-small:w-20 drop-shadow-lg' />
         </div>
         <div className="mt-2 text-2xl xs:text-lg font-regular text-black forum-regular text-center">
           Swipe to turn pages →
@@ -89,7 +89,7 @@ const Mobilemenubook: React.FC<MobileMenuBookProps> = ({ categories, items }) =>
         <h2 className="text-5xl xs:text-3xl font-regular text-center forum-regular text-black pb-1">
           Our Menu
         </h2>
-        <div className="flex-1 flex flex-col gap-3 xs:gap-[3px] justify-start pt-3 xs:pt-1">
+        <div className="flex-1 flex flex-col gap-3 xs:gap-[3px] xs-small:gap-[0px] justify-start pt-3 xs:pt-1">
           {categories.map((cat, index) => (
             <div key={cat._id} className="flex items-baseline">
               <span className="text-xl xs:text-lg font-regular forum-regular text-black">
@@ -149,11 +149,11 @@ const Mobilemenubook: React.FC<MobileMenuBookProps> = ({ categories, items }) =>
               <div className="pb-7 xs:pb-3  flex flex-col items-center  justify-between w-full gap-5">
                 <div className='flex flex-row justify-start items-center w-full gap-2'>
                   <img src={sidedoubleline} alt="" className=" h-full  justify-center items-center" />
-                <h2 className="text-3xl font-regular forum-regular text-black justify-center text-start w-full">
+                <h2 className="text-3xl xs-small:text-2xl font-regular forum-regular text-black justify-center text-start w-full">
                   {category.name}
                 </h2>
                 </div>
-                <div className='imagebasegradient flex p-3 xs:p-2 gap-1 w-60 xs:w-56 quotebg rounded-s-full relative left-[20vw] xs:left-[13vw]'>
+                <div className='imagebasegradient flex p-3 xs:p-2 gap-1 w-60 xs:w-56 quotebg rounded-s-full relative left-[20vw] xs:left-[13vw] xs-small:left-[10vw]'>
                   
                 {category.quote && (
                   <div className="category-quote forum-regular mt-2 pl-16">
@@ -161,7 +161,7 @@ const Mobilemenubook: React.FC<MobileMenuBookProps> = ({ categories, items }) =>
                   </div>
                 )}
                 </div>
-                <div className='absolute left-[33vw] top-[5.5vh] xs:left-[23vw] xs:top-[8.5vh]'>
+                <div className='absolute left-[33vw] top-[5.5vh] xs:left-[23vw] xs-small:left-[17vw] xs:top-[8.5vh]'>
                  <ImageLoader
                   src={category.imageUrl}
                   alt={category.name}
@@ -176,7 +176,7 @@ const Mobilemenubook: React.FC<MobileMenuBookProps> = ({ categories, items }) =>
 
             {/* Items List */}
             <div className="flex-1 overflow-hidden pt-6 xs:pt-0">
-              <div className="space-y-2">
+              <div className="space-y-2 xs-small:space-y-1">
                 {pageItems.map((item) => (
                   <div
                     key={item._id}
@@ -232,7 +232,7 @@ const Mobilemenubook: React.FC<MobileMenuBookProps> = ({ categories, items }) =>
     <Page key="thank-you" className="thank-you-page">
       <div className='h-full p-2 bodycoverpagebg flex flex-col gap-2 shadow-lg'>
     <div className="h-full p-[2px] bodycoverpagebg flex flex-col gap-2   shadow-lg border-[3px] border-black">
-      <div className="flex flex-col h-full border-[3px] border-black p-3 gap-4">
+      <div className="flex flex-col h-full border-[3px] border-black p-3 gap-4 xs-small:gap-2">
 
   <div className='flex w-full justify-center items-center flex-1'>
        <img src={leaf} alt="leaf" className="w-32 xs:w-24  drop-shadow-lg -rotate-[20deg]" />
@@ -241,7 +241,7 @@ const Mobilemenubook: React.FC<MobileMenuBookProps> = ({ categories, items }) =>
        </div>
        <h2 className='text-[28px] xs:text-[22px] font-regular text-center forum-regular text-black uppercase'>Thank you for choosing Open House CaffE</h2>
        <div className='flex justify-center w-full items-center'>
-        <img src={thankyouimg} alt="thank you" className="w-24  drop-shadow-lg" />
+        <img src={thankyouimg} alt="thank you" className="w-24 xs-small:w-20 drop-shadow-lg" />
        </div>
        <div className='flex flex-col justify-center items-center text-center gap-1 text-black forum-regular'>
         <span> 2nd Floor, Royal Arcade</span>
