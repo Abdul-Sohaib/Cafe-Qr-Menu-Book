@@ -196,6 +196,21 @@ body::-webkit-scrollbar {
   background-position: top;
   z-index: 10;
 }
+@media screen and (min-width: 300px) and (max-width: 600px) {
+ .verticalborder{
+  position: absolute;
+  bottom: 3rem;
+  left: -1rem;
+  width: 40%;                 /* narrower */
+  height: 15%;               /* taller */
+  background-image: url(./assets/Vertical_double_line_long.svg);
+  background-size: auto auto; /* fits height perfectly */
+  background-repeat: no-repeat;
+  background-position: top;
+  z-index: 10;
+  }
+  
+}
 
 .cornercut-container {
   position: relative;

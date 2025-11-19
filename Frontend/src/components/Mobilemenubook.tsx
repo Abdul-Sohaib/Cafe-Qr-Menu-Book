@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import HTMLFlipBook from 'react-pageflip';
-import { useRef, forwardRef, type JSX } from 'react';
+import { useRef, forwardRef, type JSX, useEffect, useState } from 'react';
 import type { Category, MenuItem } from '../types';
 import logo from '../assets/Logo.png';
 import cultureimg from '../assets/Culture_texture.jpg';
@@ -29,6 +29,22 @@ Page.displayName = 'Page';
 
 const Mobilemenubook: React.FC<MobileMenuBookProps> = ({ categories, items }) => {
   const bookRef = useRef<any>(null);
+  const [itemsPerPage, setItemsPerPage] = useState({ first: 10, subsequent: 17 });
+
+  useEffect(() => {
+    const handleResize = () => {
+      const width = window.innerWidth;
+      if (width >= 300 && width <= 600) {
+        setItemsPerPage({ first: 9, subsequent: 12 });
+      } else {
+        setItemsPerPage({ first: 10, subsequent: 17 });
+      }
+    };
+
+    handleResize(); // Initial check
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // Build pages array
   const pages: JSX.Element[] = [];
@@ -42,14 +58,14 @@ const Mobilemenubook: React.FC<MobileMenuBookProps> = ({ categories, items }) =>
         shadow-[10px_14px_25px_rgba(0,0,0,0.25),_2px_3px_8px_rgba(0,0,0,0.15)] menuwelcomebackgroundimage'>
           <div className="horizintalborder"></div>
           <div className=" flex flex-col items-center justify-center pt-10">
-        <img src={logo} alt="Cafe logo" className="w-28 mb-6 drop-shadow-lg" />
-        <h1 className="text-5xl p-3 font-regular forum-regular uppercase text-black mb-4">
+        <img src={logo} alt="Cafe logo" className="w-28 xs:w-24 mb-6 drop-shadow-lg" />
+        <h1 className="text-5xl xs:text-4xl p-3 font-regular forum-regular uppercase text-black mb-4">
            Open House caffe
         </h1>
         <div>
-          <img src={welcomemenimg} alt="Welcome illustration" className='w-36  drop-shadow-lg' />
+          <img src={welcomemenimg} alt="Welcome illustration" className='w-36 xs:w-24  drop-shadow-lg' />
         </div>
-        <div className="mt-2 text-2xl font-regular text-black forum-regular text-center">
+        <div className="mt-2 text-2xl xs:text-lg font-regular text-black forum-regular text-center">
           Swipe to turn pages →
         </div>
         </div>
@@ -70,13 +86,13 @@ const Mobilemenubook: React.FC<MobileMenuBookProps> = ({ categories, items }) =>
         <div className="flex flex-col h-full border-[3px] border-black p-3">
          <span className="left-border" aria-hidden="true"></span>
   <span className="right-border" aria-hidden="true"></span>
-        <h2 className="text-5xl font-regular text-center forum-regular text-black pb-1">
+        <h2 className="text-5xl xs:text-3xl font-regular text-center forum-regular text-black pb-1">
           Our Menu
         </h2>
-        <div className="flex-1 flex flex-col gap-3 justify-start pt-3">
+        <div className="flex-1 flex flex-col gap-3 xs:gap-[3px] justify-start pt-3 xs:pt-1">
           {categories.map((cat, index) => (
             <div key={cat._id} className="flex items-baseline">
-              <span className="text-xl font-regular forum-regular text-black">
+              <span className="text-xl xs:text-lg font-regular forum-regular text-black">
                 {index + 1}. {cat.name}
               </span>
             </div>
@@ -100,8 +116,8 @@ const Mobilemenubook: React.FC<MobileMenuBookProps> = ({ categories, items }) =>
     if (categoryItems.length === 0) return;
 
     // Smart pagination: first page has 10 items (with header), subsequent pages have 17 items
-    const FIRST_PAGE_ITEMS = 10;
-    const SUBSEQUENT_PAGE_ITEMS = 17;
+    const FIRST_PAGE_ITEMS = itemsPerPage.first;
+    const SUBSEQUENT_PAGE_ITEMS = itemsPerPage.subsequent;
     
     let remainingItems = categoryItems.length;
     let totalPages = 1; // At least one page
@@ -130,14 +146,14 @@ const Mobilemenubook: React.FC<MobileMenuBookProps> = ({ categories, items }) =>
   <span className="right-border" aria-hidden="true"></span>
             {/* Category Header with Image - only on first page */}
             {pageIndex === 0 && (
-              <div className="pb-7  flex flex-col items-center  justify-between w-full gap-5">
+              <div className="pb-7 xs:pb-3  flex flex-col items-center  justify-between w-full gap-5">
                 <div className='flex flex-row justify-start items-center w-full gap-2'>
                   <img src={sidedoubleline} alt="" className=" h-full  justify-center items-center" />
                 <h2 className="text-3xl font-regular forum-regular text-black justify-center text-start w-full">
                   {category.name}
                 </h2>
                 </div>
-                <div className='imagebasegradient flex p-3 gap-1 w-60 quotebg rounded-s-full relative left-[20vw]'>
+                <div className='imagebasegradient flex p-3 xs:p-2 gap-1 w-60 xs:w-56 quotebg rounded-s-full relative left-[20vw] xs:left-[13vw]'>
                   
                 {category.quote && (
                   <div className="category-quote forum-regular mt-2 pl-16">
@@ -145,11 +161,11 @@ const Mobilemenubook: React.FC<MobileMenuBookProps> = ({ categories, items }) =>
                   </div>
                 )}
                 </div>
-                <div className='absolute left-[33vw] top-[5.5vh]'>
+                <div className='absolute left-[33vw] top-[5.5vh] xs:left-[23vw] xs:top-[8.5vh]'>
                  <ImageLoader
                   src={category.imageUrl}
                   alt={category.name}
-                  className="w-28 h-28 object-cover rounded-full relative  border-2 border-black shadow-md flex-shrink-0 "
+                  className="w-28 h-28 xs:w-24 xs:h-24 object-cover rounded-full relative  border-2 border-black shadow-md flex-shrink-0 "
                   loaderClassName="w-fit  rounded-full"
                 />
                 </div>
@@ -159,7 +175,7 @@ const Mobilemenubook: React.FC<MobileMenuBookProps> = ({ categories, items }) =>
             )}
 
             {/* Items List */}
-            <div className="flex-1 overflow-hidden pt-6">
+            <div className="flex-1 overflow-hidden pt-6 xs:pt-0">
               <div className="space-y-2">
                 {pageItems.map((item) => (
                   <div
@@ -168,7 +184,7 @@ const Mobilemenubook: React.FC<MobileMenuBookProps> = ({ categories, items }) =>
                   >
                     <div className="flex-1 pr-2">
                       <div className="flex items-baseline gap-2">
-                        <span className="text-xl font-regular forum-regular text-black">
+                        <span className="text-xl xs:text-lg font-regular forum-regular text-black">
                           {item.name}
                         </span>
                         {item.isOutOfStock && (
@@ -219,11 +235,11 @@ const Mobilemenubook: React.FC<MobileMenuBookProps> = ({ categories, items }) =>
       <div className="flex flex-col h-full border-[3px] border-black p-3 gap-4">
 
   <div className='flex w-full justify-center items-center flex-1'>
-       <img src={leaf} alt="leaf" className="w-32  drop-shadow-lg -rotate-[20deg]" />
-       <img src={logo} alt="Cafe logo" className="w-40  drop-shadow-lg" />
-       <img src={leaf} alt="leaf" className="w-32  drop-shadow-lg scale-x-[-1] rotate-[20deg]" />
+       <img src={leaf} alt="leaf" className="w-32 xs:w-24  drop-shadow-lg -rotate-[20deg]" />
+       <img src={logo} alt="Cafe logo" className="w-40 xs:w-36  drop-shadow-lg" />
+       <img src={leaf} alt="leaf" className="w-32 xs:w-24  drop-shadow-lg scale-x-[-1] rotate-[20deg]" />
        </div>
-       <h2 className='text-[28px] font-regular text-center forum-regular text-black uppercase'>Thank you for choosing Open House CaffE</h2>
+       <h2 className='text-[28px] xs:text-[22px] font-regular text-center forum-regular text-black uppercase'>Thank you for choosing Open House CaffE</h2>
        <div className='flex justify-center w-full items-center'>
         <img src={thankyouimg} alt="thank you" className="w-24  drop-shadow-lg" />
        </div>
