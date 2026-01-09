@@ -153,21 +153,21 @@ const Mobilemenubook: React.FC<MobileMenuBookProps> = ({ categories, items }) =>
                   {category.name}
                 </h2>
                 </div>
-                <div className='imagebasegradient flex p-3 xs:p-2 gap-1 w-60 xs:w-56 quotebg rounded-s-full relative left-[20vw] xs:left-[13vw] xs-small:left-[10vw]'>
                   
-                {category.quote && (
-                  <div className="category-quote forum-regular mt-2 pl-16">
-                    {category.quote}
-                  </div>
-                )}
-                </div>
-                <div className='absolute left-[33vw] top-[5.5vh] xs:left-[23vw] xs-small:left-[17vw] xs:top-[8.5vh]'>
+              
+                
+                <div className='flex flex-col justify-center items-center border-b-2 border-black pb-2 w-full'>
                  <ImageLoader
                   src={category.imageUrl}
                   alt={category.name}
-                  className="w-28 h-28 xs:w-24 xs:h-24 object-cover rounded-full relative  border-2 border-black shadow-md flex-shrink-0 "
-                  loaderClassName="w-fit  rounded-full"
+                  className="w-28 h-28 xs:w-24 xs:h-20 object-cover rounded-md relative  border-2 border-black shadow-md flex-shrink-0 "
+                  loaderClassName="w-fit  rounded-md"
                 />
+                  {category.quote && (
+                  <div className="category-quote forum-bold mt-2">
+                    {category.quote}
+                  </div>
+                )}
                 </div>
                 
                 
@@ -175,7 +175,7 @@ const Mobilemenubook: React.FC<MobileMenuBookProps> = ({ categories, items }) =>
             )}
 
             {/* Items List */}
-            <div className="flex-1 overflow-hidden pt-6 xs:pt-0">
+            <div className="flex-1 overflow-hidden pt-6 xs:pt-3">
               <div className="space-y-2 xs-small:space-y-1">
                 {pageItems.map((item) => (
                   <div
