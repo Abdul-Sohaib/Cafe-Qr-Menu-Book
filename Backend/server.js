@@ -17,7 +17,7 @@ app.use(cors({
     if (!origin) return callback(null, true);
     
     const allowedOrigins = [
-      'https://7grammbook.netlify.app',
+      'https://openhousecaffe.netlify.app',
       'http://localhost:5173'
     ];
     

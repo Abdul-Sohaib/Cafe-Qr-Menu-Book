@@ -163,7 +163,7 @@ const MenuItemList: React.FC<MenuItemListProps> = ({ token, onItemUpdated, onEdi
                         <div className='flex flex-col gap-4'>
                           <div className='flex justify-between items-center'>
                             <h3 className="text-lg font-bold font-heading">{item.name}</h3>
-                            <p className="text-gray-600 font-heading font-bold">₹{item.price.toFixed(2)}</p>
+                            <p className="text-black font-heading font-bold">₹{item.price.toFixed(2)}</p>
                           </div>
                           {item.varieties && item.varieties.length > 0 && (
                             <div className="relative">

@@ -156,15 +156,15 @@ const Mobilemenubook: React.FC<MobileMenuBookProps> = ({ categories, items }) =>
                   
               
                 
-                <div className='flex flex-col justify-center items-center border-b-2 border-black pb-2 w-full'>
+                <div className='flex gap-3 justify-around items-center border-b-2 border-black pb-2 w-full h-full'>
                  <ImageLoader
                   src={category.imageUrl}
                   alt={category.name}
-                  className="w-28 h-28 xs:w-24 xs:h-20 object-cover rounded-md relative  border-2 border-black shadow-md flex-shrink-0 "
+                  className="w-28 h-28 xs:w-20 xs:h-20 object-cover rounded-full relative border-2 border-black shadow-md flex-shrink-0 "
                   loaderClassName="w-fit  rounded-md"
                 />
                   {category.quote && (
-                  <div className="category-quote forum-bold mt-2">
+                  <div className="category-quote font-semibold mt-2 ">
                     {category.quote}
                   </div>
                 )}
